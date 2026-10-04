@@ -1227,7 +1227,7 @@ function renderCheck(){const el=document.getElementById('view-check');if(S.sourc
   const on=(id,f)=>{const x=el.querySelector('#'+id);if(x)x.onclick=f};on('ckExport',()=>exportCopilot());on('ckMark',()=>msMark());on('ckKey',exportKey);on('ckMissing',()=>msAvailable()?msMark(true):exportCopilot(true));renderJob()}
 
 /* ============================== MICROSOFT 365 CONNECTION (hosted version) ============================== */
-const MS_DEFAULT=/*MSCONFIG-START*/{clientId:'',tenantId:'',folder:'AILPD Marking'}/*MSCONFIG-END*/;
+const MS_DEFAULT={"clientId": "13d1548e-c0b7-4a37-b7dc-f8a2fc97b784", "tenantId": "1d209e03-a06f-4c48-b124-fd205a748a47", "folder": "AILPD Marking"};
 const MS={cfg:null,pca:null,account:null,job:null,timer:null,pack:null};
 const MS_SCOPES=['User.Read','Files.ReadWrite'];
 const msAvailable=()=>typeof window.msal!=='undefined';
