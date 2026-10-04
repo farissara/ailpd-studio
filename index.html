@@ -76,7 +76,7 @@ class En{constructor(e,t,r,n,o,i,a,s){this.canonicalAuthority=e,this._canonicalA
 
 </script>
 </head>
-<body>
+<body class="gated">
 <title>AILPD Pre/Post Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -349,6 +349,23 @@ kbd{font-family:var(--mono);font-size:12px;border:1px solid var(--line-2);border
   .panel,.mod,.hero{break-inside:avoid} .grid.g2{grid-template-columns:1fr 1fr}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+/* ---------- sign-in gate ---------- */
+body.gated .shell,body.gated #tip{display:none!important}
+#gate{min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(1200px 600px at 10% -10%,var(--post-soft),transparent 60%),var(--bg)}
+body.gated #gate{display:grid}
+.gate-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);width:min(920px,100%);background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.08)}
+.gate-brand{background:linear-gradient(150deg,var(--hero),var(--hero-2));color:var(--hero-ink);padding:36px 34px;display:flex;flex-direction:column;gap:10px}
+.gate-brand .mark{align-self:flex-start;font-weight:700;font-size:11px;letter-spacing:.14em;background:#fff;color:#12606c;padding:3px 7px;border-radius:4px;direction:ltr}
+.gate-brand h1{font-size:26px;line-height:1.2;margin-top:6px} .gate-brand p{color:var(--hero-mute)}
+.gate-list{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:12px}
+.gate-list li{display:flex;gap:10px;font-size:14px;line-height:1.45}.gate-list li::before{content:"✓";color:var(--hero-post);font-weight:700}
+.gate-main{padding:64px 34px 36px;display:flex;flex-direction:column;gap:12px;justify-content:center;position:relative}
+.gate-main h2{font-size:22px} .gate-main>p{color:var(--ink-2)}
+.gate-tools{position:absolute;top:16px;inset-inline-end:16px;display:flex;gap:8px}
+.gate-btn{justify-content:center;padding:11px 16px;font-size:15px;margin-top:6px}
+.gate-msg{min-height:1.4em;color:var(--bad)}
+.gate-foot{margin-top:10px;border-top:1px solid var(--line);padding-top:12px}
+@media (max-width:760px){.gate-card{grid-template-columns:1fr}.gate-brand{padding:24px}.gate-list{display:none}.gate-main{padding:56px 22px 24px}}
 /* ---------- TEPD-style shell ---------- */
 .hs .v{white-space:nowrap;font-size:clamp(22px,2.3vw,32px)}
 .chip{flex:none}
@@ -442,6 +459,18 @@ html[dir=rtl] .answer.empty{direction:rtl;text-align:right;font-family:var(--ara
 html[dir=rtl] .brand p{max-width:70ch}
 </style>
 
+<div id="gate" hidden>
+  <div class="gate-card">
+    <div class="gate-brand"><div class="mark" aria-hidden="true">QRTA</div><h1>AILPD Pre/Post Studio</h1><p>Advanced Instructional Leadership Diploma · pre/post results</p>
+      <ul class="gate-list"><li>Check each cohort's survey file before marking</li><li>Send written answers to Copilot and get the marks back in one click</li><li>See what each cohort gained, by module, question and group</li></ul></div>
+    <div class="gate-main"><div class="gate-tools" id="gateTools"></div>
+      <h2>Sign in to continue</h2><p>Use your QRTA Microsoft account. Only QRTA staff can open the dashboard.</p>
+      <button class="btn primary gate-btn" id="gateSignIn"><svg width="16" height="16" viewBox="0 0 21 21" aria-hidden="true"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg><span>Sign in with Microsoft</span></button>
+      <p class="small gate-msg" id="gateMsg" role="status"></p>
+      <div class="gate-setup" id="gateSetup" hidden><p class="small muted">The Microsoft connection isn't set up yet.</p><button class="btn ghost" id="gateBypass">Continue in setup mode</button></div>
+      <p class="small muted gate-foot">Survey files are read in your browser and saved only to your own OneDrive. Nothing is stored on this website.</p></div>
+  </div>
+</div>
 <div class="shell">
   <aside class="side" aria-label="Menu">
     <div class="brand"><div class="mark" aria-hidden="true">QRTA</div><h1>AILPD Pre/Post Studio</h1><p>Advanced Instructional Leadership Diploma · pre/post results</p></div>
@@ -1212,9 +1241,9 @@ async function msInit(){if(!msAvailable())return null;MS.cfg=msCfg();if(!MS.cfg.
   await pca.initialize();try{const r=await pca.handleRedirectPromise();if(r&&r.account)pca.setActiveAccount(r.account)}catch(e){}
   const acc=pca.getActiveAccount()||pca.getAllAccounts()[0];if(acc){pca.setActiveAccount(acc);MS.account=acc}MS.pca=pca;return pca}
 async function msSignIn(){const pca=await msInit();if(!pca){toast('Add the Microsoft connection details first');openMsPanel();return false}
-  try{const r=await pca.loginPopup({scopes:MS_SCOPES,prompt:'select_account'});pca.setActiveAccount(r.account);MS.account=r.account;toast('Signed in to Microsoft');await msAfterSignIn();renderAll();return true}
+  try{const r=await pca.loginPopup({scopes:MS_SCOPES,prompt:'select_account'});if(/^[0-9a-f-]{36}$/i.test(MS.cfg.tenantId)&&r.account.tenantId&&r.account.tenantId.toLowerCase()!==MS.cfg.tenantId.toLowerCase()){try{await pca.logoutPopup({account:r.account})}catch(e){}toast('Please sign in with your QRTA account');return false}pca.setActiveAccount(r.account);MS.account=r.account;toast('Signed in to Microsoft');await msAfterSignIn();renderAll();return true}
   catch(e){const c=String(e&&(e.errorCode||e.message)||'');if(/popup_window|blocked/i.test(c)){await pca.loginRedirect({scopes:MS_SCOPES});return false}toast('Microsoft sign-in did not complete');renderAll();return false}}
-async function msSignOut(){const acc=MS.account;MS.account=null;stopPoll();if(MS.pca&&acc){try{await MS.pca.logoutPopup({account:acc})}catch(e){}}renderAll()}
+async function msSignOut(){const acc=MS.account;MS.account=null;stopPoll();if(MS.pca&&acc){try{await MS.pca.logoutPopup({account:acc})}catch(e){}}S.setupBypass=false;updateGate();renderAll()}
 async function msToken(){const pca=await msInit();if(!pca||!MS.account){const e=new Error('Sign in to Microsoft first');e.code='signin';throw e}
   try{return(await pca.acquireTokenSilent({scopes:MS_SCOPES,account:MS.account})).accessToken}catch(e){return(await pca.acquireTokenPopup({scopes:MS_SCOPES})).accessToken}}
 async function gfetch(path,opts={},tries=0){const t=await msToken();const url=path.startsWith('http')?path:'https://graph.microsoft.com/v1.0'+path;const h={Authorization:'Bearer '+t,...(opts.headers||{})};let body=opts.body;if(opts.json!==undefined){h['Content-Type']='application/json';body=JSON.stringify(opts.json)}
@@ -1238,6 +1267,15 @@ async function msColumn(itemId,name){const r=await gfetch(`/me/drive/items/${ite
 async function msAfterSignIn(){if(!MS.account)return;try{await msEnsureFolder(MS.cfg.folder+'/Inbox')}catch(e){}
   if(!RUBRIC_OK){try{const p=await msGetJSON(MS.cfg.folder+'/rubric-pack.json');if(p&&applyRubric(p)){MS.pack='onedrive';toast('Rubric pack loaded from OneDrive')}else MS.pack='missing'}catch(e){MS.pack='error'}}else MS.pack=MS.pack||'built-in'
   await loadHistory();resumeJob()}
+/* ---------- sign-in gate ---------- */
+function gateNeeded(){if(!msAvailable())return false;if(MS.account)return false;if(!msConfigured())return !S.setupBypass;return true}
+function updateGate(state){const g=document.getElementById('gate');if(!g)return;const need=gateNeeded();document.body.classList.toggle('gated',need);g.hidden=!need;if(!need)return;
+  const cfg=msConfigured(),btn=document.getElementById('gateSignIn'),msg=document.getElementById('gateMsg');document.getElementById('gateSetup').hidden=cfg;btn.disabled=!cfg||state==='busy';
+  if(state==='checking')msg.textContent='Checking your sign-in…';else if(state==='busy')msg.textContent='Opening Microsoft sign-in…';else if(state&&state.error)msg.textContent=state.error;else msg.textContent='';
+  const tools=document.getElementById('gateTools'),lb=document.getElementById('langBtn'),tb=document.getElementById('themeBtn');if(tools&&lb&&!tools.contains(lb)){tools.appendChild(lb);if(tb)tools.appendChild(tb)}}
+function leaveGate(){const tools=document.getElementById('sideTools'),lb=document.getElementById('langBtn'),tb=document.getElementById('themeBtn');if(tools&&lb&&!tools.contains(lb)){tools.insertBefore(tb,tools.firstChild);tools.insertBefore(lb,tools.firstChild)}}
+function wireGate(){const b=document.getElementById('gateSignIn');if(b)b.onclick=async()=>{updateGate('busy');const ok=await msSignIn();if(ok){leaveGate();updateGate()}else updateGate({error:'Sign-in did not complete. Try again, and allow pop-ups for this site if the window was blocked.'})};
+  const by=document.getElementById('gateBypass');if(by)by.onclick=()=>{S.setupBypass=true;leaveGate();updateGate();openMsPanel()}}
 /* ---------- one-click marking job ---------- */
 const jobKey=()=>'ailpd-job:'+storageKey();
 function saveJob(){try{MS.job?localStorage.setItem(jobKey(),JSON.stringify(MS.job)):localStorage.removeItem(jobKey())}catch(e){}}
@@ -1278,7 +1316,7 @@ function renderJob(){document.querySelectorAll('[data-job]').forEach(el=>{el.inn
 /* ---------- rubric pack ---------- */
 function exportPack(){return window.CURRENT_PACK||null}
 async function installPack(pack){if(!applyRubric(pack)){toast('That file is not a valid rubric pack');return}MS.pack='loaded';toast('Rubric pack loaded');if(MS.account){try{await msPutJSON(MS.cfg.folder+'/rubric-pack.json',pack);MS.pack='onedrive';toast('Rubric pack saved to your OneDrive')}catch(e){toast('Loaded, but could not save it to OneDrive')}}renderAll()}
-function openMsPanel(){switchTab('workflow');setTimeout(()=>{const p=document.getElementById('msPanel');if(p)p.scrollIntoView({behavior:'smooth',block:'start'})},60)}
+function openMsPanel(){switchTab('workflow');setTimeout(()=>{const p=document.getElementById('msPanel');if(p&&p.scrollIntoView)p.scrollIntoView({behavior:'smooth',block:'start'})},60)}
 function msPanelHtml(){if(!msAvailable())return'';const c=msCfg(),signed=!!MS.account;
   return`<div class="panel mt" id="msPanel"><div class="panel-head"><div><h2>Microsoft 365 connection</h2><p>Signs in with your QRTA account so the dashboard can send answers to your Copilot flow and bring the marks back. Files go straight between this browser and your OneDrive.</p></div><span class="pill ${signed?'sig':'ns'}" style="font-size:12px">${signed?'Connected':'Not connected'}</span></div>
     <div class="stack">${signed?`<div class="actions"><span class="chip info">${esc(MS.account.name||MS.account.username||'')}</span><span class="small muted">${esc(MS.account.username||'')}</span><button class="btn ghost" id="msOut">Sign out</button></div>`:`<div class="actions"><button class="btn primary" id="msIn" ${msConfigured()?'':'disabled'}>Sign in with Microsoft</button></div>`}
@@ -1431,7 +1469,7 @@ document.getElementById('fileInput').onchange=e=>{readFile(e.target.files[0],(wb
 document.getElementById('lookupInput').onchange=e=>{readFile(e.target.files[0],importLookup);e.target.value=''};
 document.getElementById('demoBtn').onclick=()=>{demoData();toast('Demo data loaded')};
 async function initCaps(){const use=n=>window.claude&&window.claude.use?Promise.resolve(window.claude.use(n)).catch(()=>null):Promise.resolve(null);[downloads,sample,db]=await Promise.all([use('downloads'),use('sample'),use('db')]);renderAll();loadHistory()}
-demoData();initCaps();if(msAvailable())msInit().then(async()=>{if(MS.account)await msAfterSignIn();renderAll()}).catch(()=>{});
+demoData();initCaps();if(msAvailable()){wireGate();updateGate('checking');msInit().then(async()=>{if(MS.account){leaveGate();updateGate();await msAfterSignIn()}else updateGate();renderAll()}).catch(()=>updateGate())}
 </script>
 <script>
 const AR={
@@ -1980,6 +2018,14 @@ const AR={
 "Written answers are marked by M&E or by Copilot against the rubric; Copilot's accuracy is checked against M&E on the calibration set.":"تُصحَّح الإجابات الكتابية من المتابعة والتقييم أو من Copilot وفق سلّم التصحيح، وتُقاس دقة Copilot مقارنة بالمتابعة والتقييم على عينة المعايرة.",
 "Confidence and practice are self-ratings read straight from the survey.":"الثقة والممارسة تقديرات ذاتية تُقرأ مباشرة من الاستبانة.",
 "Switch section (with Alt)":"التنقل بين الأقسام (مع Alt)",
+
+"Check each cohort's survey file before marking":"افحص ملف استبانة كل فوج قبل التصحيح","Send written answers to Copilot and get the marks back in one click":"أرسل الإجابات المكتوبة إلى Copilot واستلم العلامات بنقرة واحدة","See what each cohort gained, by module, question and group":"اطّلع على مكاسب كل فوج حسب الوحدة والسؤال والفئة",
+"Sign in to continue":"سجّل الدخول للمتابعة","Use your QRTA Microsoft account. Only QRTA staff can open the dashboard.":"استخدم حساب Microsoft الخاص بالأكاديمية. لا يمكن فتح لوحة المعلومات إلا لموظفي الأكاديمية.",
+"The Microsoft connection isn't set up yet.":"لم يُعدّ الاتصال بـ Microsoft بعد.","Continue in setup mode":"المتابعة في وضع الإعداد",
+"Survey files are read in your browser and saved only to your own OneDrive. Nothing is stored on this website.":"تُقرأ ملفات الاستبانة في متصفحك وتُحفظ فقط في OneDrive الخاص بك. لا يُخزَّن أي شيء على هذا الموقع.",
+"Checking your sign-in…":"جارٍ التحقق من تسجيل الدخول…","Opening Microsoft sign-in…":"جارٍ فتح تسجيل الدخول إلى Microsoft…",
+"Sign-in did not complete. Try again, and allow pop-ups for this site if the window was blocked.":"لم يكتمل تسجيل الدخول. حاول مجددًا، واسمح بالنوافذ المنبثقة لهذا الموقع إذا حُجبت النافذة.",
+"Please sign in with your QRTA account":"يرجى تسجيل الدخول بحساب الأكاديمية",
 /* ---------- toasts & errors ---------- */
 "Every written answer already has a mark":"كل إجابة مكتوبة لديها علامة بالفعل",
 "Tip: mark the calibration set first so Copilot gets worked examples":"نصيحة: صحّح عينة المعايرة أولًا ليحصل Copilot على أمثلة محلولة",
@@ -2087,7 +2133,7 @@ document.getElementById('langBtn').addEventListener('click',e=>{const b=e.target
 document.getElementById('themeBtn').onclick=()=>setTheme(theme()==='dark'?'light':'dark');
 if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener&&matchMedia('(prefers-color-scheme: dark)').addEventListener('change',paintToggles);
 const t0=store.get('ailpd-theme');if(t0==='dark'||t0==='light')document.documentElement.setAttribute('data-theme',t0);
-S.lang='en';const l0=store.get('ailpd-lang');if(l0==='ar')setLang('ar');else paintToggles();
+S.lang='en';const l0=store.get('ailpd-lang');if(l0==='ar')setLang('ar');else paintToggles();try{if(typeof updateGate==='function'&&document.body.classList.contains('gated'))updateGate(MS.pca||!msConfigured()?undefined:'checking')}catch(e){}
 })();
 
 </script>
