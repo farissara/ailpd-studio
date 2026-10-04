@@ -478,7 +478,7 @@ html[dir=rtl] .brand p{max-width:70ch}
       <div class="navlab">Results</div>
       <button class="tab" role="tab" data-tab="impact" aria-selected="true"><span class="ni">◎</span>Overview</button>
       <button class="tab" role="tab" data-tab="deep"><span class="ni">▤</span>Question by question</button>
-      <button class="tab" role="tab" data-tab="groups"><span class="ni">◫</span>Groups &amp; governorates</button>
+      <button class="tab" role="tab" data-tab="groups"><span class="ni">◫</span>Groups</button>
       <button class="tab" role="tab" data-tab="cohorts"><span class="ni">↗</span>Across cohorts</button>
       <button class="tab" role="tab" data-tab="summary"><span class="ni">▭</span>One-page summary</button>
       <div class="navlab">Marking</div>
@@ -497,7 +497,6 @@ html[dir=rtl] .brand p{max-width:70ch}
     <header class="top">
       <div class="actions">
         <span class="btn primary file-btn">Open survey workbook<input type="file" id="fileInput" accept=".xlsx,.xls,.csv" aria-label="Open survey workbook"></span>
-        <span class="btn file-btn">Add governorate list<input type="file" id="lookupInput" accept=".xlsx,.xls,.csv" aria-label="Add ID to governorate list"></span>
         <button class="btn ghost" id="demoBtn">Reload demo</button>
       </div>
     </header>
@@ -554,7 +553,7 @@ const DIMS={
  stype:{label:'School type',map:{1:'Boys',2:'Girls',3:'Co-ed',4:'Not applicable'}},major:{label:'Undergraduate major',map:{1:'Education',2:'Other field + education training',3:'Other field, no education training'}},
  degree:{label:'Highest degree',map:{1:'Bachelor',2:'High Diploma',3:'Master',4:'Doctorate',5:'Other'}},
  plc:{label:'How often subject teachers meet',map:{1:'Daily',2:'Once a week',3:'0–1 times a month',4:'1–2 times a month',5:'Never',6:'Don\'t know',7:'Not applicable'}},
- authority:{label:'School type code (not in guide)',map:{1:'Code 1',2:'Code 2'}},governorate:{label:'Governorate',lookup:true},directorate:{label:'Directorate',lookup:true}};
+ authority:{label:'School type code (not in guide)',map:{1:'Code 1',2:'Code 2'}}};
 const GOV=[{k:'Irbid',ar:'إربد',c:0,r:0,al:['irbid','اربد','إربد']},{k:'Mafraq',ar:'المفرق',c:1,r:0,al:['mafraq','المفرق']},{k:'Ajloun',ar:'عجلون',c:0,r:1,al:['ajloun','ajlun','عجلون']},{k:'Jerash',ar:'جرش',c:1,r:1,al:['jerash','jarash','جرش']},
  {k:'Balqa',ar:'البلقاء',c:0,r:2,al:['balqa','salt','البلقاء','السلط']},{k:'Amman',ar:'العاصمة',c:1,r:2,al:['amman','capital','العاصمة','عمان','عمّان']},{k:'Zarqa',ar:'الزرقاء',c:2,r:2,al:['zarqa','zarka','الزرقاء']},
  {k:'Madaba',ar:'مادبا',c:0,r:3,al:['madaba','مادبا']},{k:'Karak',ar:'الكرك',c:0,r:4,al:['karak','kerak','الكرك']},{k:'Tafilah',ar:'الطفيلة',c:0,r:5,al:['tafil','الطفيلة']},{k:'Ma\'an',ar:'معان',c:1,r:5,al:['maan','معان']},{k:'Aqaba',ar:'العقبة',c:0,r:6,al:['aqaba','العقبة']}];
@@ -731,7 +730,7 @@ function demoData(){const R=mulberry(20240605),pick=w=>{const t=w.reduce((a,b)=>
   for(let i=0;i<88;i++)person(newId(),['pre','post']);for(let i=0;i<10;i++)person(newId(),['pre']);for(let i=0;i<4;i++)person(newId(),['post']);
   S.marks={};S.bank=[];S.bankName='';S.codeKey=null;
   setData(recs,{source:'demo',fileName:'Demo cohort (fictional)',used:['Demo'],raw:{pre:98,post:92,preRows:104,postRows:95},missing:[],qText:{}});
-  S.lookup=lookup;S.lookupName='Demo governorate list';S.cohort='Demo cohort (fictional)';
+  S.cohort='Demo cohort (fictional)';
   const R2=mulberry(77);for(const p of S.pairs)for(const r of[p.pre,p.post])for(const q of WRITTEN){const mm=S.marks[mkey(r.wave,r.id,q.n)]||(S.marks[mkey(r.wave,r.id,q.n)]={});if(mm.auto!=null)continue;const s=r._true[q.n];
     if(inCal(q.n,r))mm.h=s;if(isAnchor(q.n,r))continue;let ai=s;const x=R2();if(x<.13)ai=Math.min(q.max,s+1);else if(x<.19)ai=Math.max(0,s-1);else if(x<.205)ai=Math.max(0,s-2);
     mm.ai=ai;mm.cf=x<.19?(R2()<.5?'low':'medium'):'high';mm.pts=s?'Demo: rubric points matched':'';mm.why='Demo reason';mm.ai2=x<.08?Math.max(0,ai-1):ai;mm.flag=mm.cf==='low'||mm.ai2!==ai}
@@ -945,14 +944,13 @@ function renderGroups(){const el=document.getElementById('view-groups'),hasL=Obj
   const mx=Math.max(...Object.values(cells).filter(a=>a.length>=S.settings.minN).map(a=>Math.abs(mean(a))),1e-9);{const big=Object.entries(cells).filter(([k,a])=>a.length>=S.settings.minN).map(([k,a])=>({k,m:mean(a),n:a.length})).sort((a,b)=>b.m-a.m)[0];if(big&&S.segDim!==S.segDim2){const[r,c]=big.k.split('||');TKx=takeaway(`The biggest gain is where ${r} meets ${c} (${sgn(big.m,dec)}, n = ${big.n}).`,`أكبر مكسب حيث تلتقي فئة ${TA(r)} مع ${TA(c)} (${sgn(big.m,dec)}، العدد ${big.n}).`)}}const col=v=>{const t=Math.min(1,Math.abs(v)/mx);return`rgba(${v>=0?'18,96,108':'208,59,59'},${(0.14+0.7*t).toFixed(2)})`};
   const cross=S.segDim===S.segDim2?'<div class="note">Pick two different groupings to combine them.</div>':`<div class="tbl-wrap"><table class="heat"><thead><tr><th></th>${colList.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>
     ${rowList.map(r=>`<tr><td class="rowh">${esc(r)}</td>${colList.map(c=>{const a=cells[r+'||'+c]||[];if(!a.length)return'<td class="muted">·</td>';if(a.length<S.settings.minN)return`<td class="muted" data-tip="Fewer than ${S.settings.minN} people: hidden to protect anonymity"><span class="n">n = ${a.length}</span></td>`;const v=mean(a);return`<td style="background:${col(v)};${Math.abs(v)/mx>.55?'color:#fff':''}" data-tip="${esc(r)} × ${esc(c)}<br>Mean gain ${sgn(v,dec)}<br>n = ${a.length}"><span class="cell">${sgn(v,dec)}</span><span class="n">n = ${a.length}</span></td>`}).join('')}</tr>`).join('')}</tbody></table></div>`;
-  el.innerHTML=`<div class="grid g2"><div class="panel" id="mapPanel"><div class="panel-head"><div><h2>Gain by governorate</h2><p>Schematic map of Jordan's governorates, not to scale. Governorates with fewer than ${S.settings.minN} participants are hidden.</p></div><label class="field">Measure<select id="mapMeasure">${measOpts(S.mapMeasure)}</select></label></div><div id="mapBox"></div></div>
-    <div class="panel" id="grpPanel"><div class="panel-head"><div><h2>Explore groups${info('p')}</h2><p>“Significant” means a paired t-test gives p &lt; .05 within that group.</p></div></div>
+  el.innerHTML=`<div class="panel" id="grpPanel"><div class="panel-head"><div><h2>Explore groups${info('p')}</h2><p>“Significant” means a paired t-test gives p &lt; .05 within that group.</p></div></div>
       <div class="controls"><label class="field">Measure<select id="segMeasure">${measOpts(S.segMeasure)}</select></label><label class="field">Group by<select id="segDim">${dimOpts(S.segDim)}</select></label><label class="field">Smallest group shown<input type="number" id="minN" min="3" max="50" value="${S.settings.minN}"></label></div>
-      ${TKg}${rows.length?dumbbell(rows,lo,hi,{dec}):'<div class="note">No complete results for this measure yet. Mark more answers, or choose confidence or practice.</div>'}</div></div>
+      ${TKg}${rows.length?dumbbell(rows,lo,hi,{dec}):'<div class="note">No complete results for this measure yet. Mark more answers, or choose confidence or practice.</div>'}</div>
    <div class="panel mt"><div class="panel-head"><div><h2>${esc(Me.label)} by ${esc(DIMS[S.segDim].label.toLowerCase())}</h2></div></div>${table}</div>
    <div class="panel mt"><div class="panel-head"><div><h2>Two characteristics combined</h2><p>Mean gain where two groupings overlap. Blue = gain, red = drop, darker = larger.</p></div><label class="field">Compare with<select id="segDim2">${dimOpts(S.segDim2)}</select></label></div>${TKx}${cross}</div>`;
-  renderMap();el.querySelector('#segMeasure').onchange=e=>{S.segMeasure=e.target.value;renderTab()};el.querySelector('#segDim').onchange=e=>{S.segDim=e.target.value;renderTab()};el.querySelector('#segDim2').onchange=e=>{S.segDim2=e.target.value;renderTab()};
-  el.querySelector('#minN').onchange=e=>{S.settings.minN=Math.max(3,+e.target.value||10);renderAll()};el.querySelector('#mapMeasure').onchange=e=>{S.mapMeasure=e.target.value;renderTab()}}
+  el.querySelector('#segMeasure').onchange=e=>{S.segMeasure=e.target.value;renderTab()};el.querySelector('#segDim').onchange=e=>{S.segDim=e.target.value;renderTab()};el.querySelector('#segDim2').onchange=e=>{S.segDim2=e.target.value;renderTab()};
+  el.querySelector('#minN').onchange=e=>{S.settings.minN=Math.max(3,+e.target.value||10);renderAll()}}
 function renderMap(){const box=document.getElementById('mapBox');if(!box)return;if(!Object.keys(S.lookup).length){box.innerHTML='<div class="note">Governorate isn\'t in the survey. Use “Add governorate list”: a sheet with the ministry ID and governorate (and optionally directorate).</div>';return}
   const Me=MEASURES[S.mapMeasure],dec=Me.dec,g={},unm=new Set();for(const p of S.pairs){const raw=dimVal(p,'governorate');if(!raw)continue;const k=govKey(raw);if(!k){unm.add(raw);continue}const a=Me.get(p.pre),b=Me.get(p.post);if(a==null||b==null)continue;(g[k]=g[k]||[]).push(b-a)}
   const mx=Math.max(...Object.values(g).filter(a=>a.length>=S.settings.minN).map(a=>Math.abs(mean(a))),1e-9);const col=v=>`rgba(${v>=0?'18,96,108':'208,59,59'},${(0.16+0.74*Math.min(1,Math.abs(v)/mx)).toFixed(2)})`;
@@ -1124,8 +1122,7 @@ function renderWorkflow(){const el=document.getElementById('view-workflow'),cs=c
       <div class="actions mt"><span class="btn file-btn">Import a file (marks, key or bank)<input type="file" class="anyImport" accept=".xlsx,.csv"></span></div>
       <p class="small muted mt">Names, emails and IP addresses in the workbook are never read. Marks stay in this browser until exported.</p></div>
     <div class="panel"><div class="panel-head"><div><h2>Rubric issues for M&amp;E</h2><p>Where the coding guide is incomplete or contradicts itself. Two markers would disagree here, and so would Copilot.</p></div></div>
-      ${Q.filter(q=>q.flag).map(q=>`<div class="issue"><span class="chip bad">Q${q.n}</span><div><b>${esc(q.title)}</b><div class="small">${esc(q.flag)}</div></div></div>`).join('')}
-      <div class="issue"><span class="chip bad">Geo</span><div><b>No governorate question</b><div class="small">Add governorate and directorate from the registration list by ministry ID, or add the question next round.</div></div></div></div></div>${msPanelHtml()}`;
+      ${Q.filter(q=>q.flag).map(q=>`<div class="issue"><span class="chip bad">Q${q.n}</span><div><b>${esc(q.title)}</b><div class="small">${esc(q.flag)}</div></div></div>`).join('')}</div></div>${msPanelHtml()}`;
   el.querySelectorAll('.anyImport').forEach(i=>i.onchange=e=>{readFile(e.target.files[0],importAny);e.target.value=''});wireMsPanel(el);renderJob();
   el.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{S.markMode=b.dataset.go;S.markIdx=0;const f=WRITTEN.find(x=>modeIdx(x.n).length);if(f)S.markQ=f.n;switchTab('marking')});
   el.querySelectorAll('[data-cm]').forEach(b=>b.onclick=()=>{S.cmQ=+b.dataset.cm;renderWorkflow()});
@@ -1423,7 +1420,7 @@ const TERMS={
  prac:['Practice frequency (1–4)','How often participants say they use each practice: 1 = never, 4 = more than twice a semester. Self-reported.','تكرار الممارسة (1–4)','مدى تكرار استخدام المشاركين لكل ممارسة: 1 = أبدًا، 4 = أكثر من مرتين في الفصل. تقدير ذاتي.'],
  quadrant:['Knowledge vs confidence','Each dot is one participant: across = how much their marks changed, up = how much their confidence changed. The shaded top-left corner holds people whose confidence rose while their answers did not.','المعرفة مقابل الثقة','كل نقطة مشارك: أفقيًا تغيّر علاماته، وعموديًا تغيّر ثقته. الزاوية العلوية اليسرى المظلَّلة تضم من ارتفعت ثقتهم دون أن تتحسن إجاباتهم.'],
  dumbbell:['Before-and-after chart','The grey dot is the pre-test, the teal dot the post-test, and the line between them is the change. A longer line means a bigger change.','مخطط قبل وبعد','النقطة الرمادية هي الاختبار القبلي، والخضراء المزرقّة هي البعدي، والخط بينهما هو التغيّر. كلما طال الخط كان التغيّر أكبر.'],
- minN:['Privacy minimum','Groups with fewer people than this number are hidden, so nobody can be identified from a small group. You can change it in Groups & governorates.','الحد الأدنى للخصوصية','تُخفى الفئات التي يقل عدد أفرادها عن هذا الرقم، حتى لا يمكن التعرف على أحد من فئة صغيرة. يمكن تغييره من صفحة الفئات والمحافظات.'],
+ minN:['Privacy minimum','Groups with fewer people than this number are hidden, so nobody can be identified from a small group. You can change it in Groups.','الحد الأدنى للخصوصية','تُخفى الفئات التي يقل عدد أفرادها عن هذا الرقم، حتى لا يمكن التعرف على أحد من فئة صغيرة. يمكن تغييره من صفحة الفئات.'],
  qwk:['QWK (agreement score)','How closely Copilot’s marks match M&E’s marks on the same answers, from 0 (no better than chance) to 1 (identical). 0.70 or more is the usual bar for trusting automated marking.','QWK (مقياس الاتفاق)','مدى تطابق علامات Copilot مع علامات المتابعة والتقييم على الإجابات نفسها، من 0 (لا أفضل من الصدفة) إلى 1 (تطابق تام). 0.70 فأكثر هو الحد المعتاد للوثوق بالتصحيح الآلي.'],
  cal:['Calibration set','A small random set of answers per question that M&E marks by hand first. Half become worked examples for Copilot; the other half test how closely Copilot agrees.','عينة المعايرة','عينة عشوائية صغيرة من الإجابات لكل سؤال تصحّحها المتابعة والتقييم يدويًا أولًا. نصفها يصبح أمثلة لـ Copilot، والنصف الآخر يختبر مدى اتفاقه.'],
  blank:['Blank (auto 0)','Answers that are empty or say things like “I don’t know”. They get 0 automatically and are not sent to Copilot.','فارغة (صفر تلقائي)','الإجابات الفارغة أو التي تقول مثل «لا أعرف». تأخذ صفرًا تلقائيًا ولا تُرسل إلى Copilot.'],
@@ -1438,7 +1435,7 @@ const info=k=>`<button class="info" type="button" data-term="${k}" aria-label="W
 function goTo(o){if(o.set)Object.assign(S,o.set);switchTab(o.tab);if(o.el)setTimeout(()=>{const x=document.querySelector(o.el);if(x){if(x.scrollIntoView)x.scrollIntoView({behavior:'smooth',block:'start'});x.classList.remove('flash');void x.offsetWidth;x.classList.add('flash')}},80);else scrollTo({top:0,behavior:'smooth'})}
 document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-goto]');if(!b)return;e.preventDefault();try{goTo(JSON.parse(b.dataset.goto))}catch(err){}});
 const goAttr=o=>`data-goto='${JSON.stringify(o).replace(/'/g,'&#39;')}'`;
-function questionsHtml(){const Qs=[['Did the programme improve knowledge?',{tab:'impact',el:'.hero'}],['Which module needs the most attention?',{tab:'deep',el:'#qPanel'}],['Which questions improved least?',{tab:'deep',el:'#qPanel'}],['Do newer school leaders gain more?',{tab:'groups',set:{segDim:'years'},el:'#grpPanel'}],['Do principals and assistants gain differently?',{tab:'groups',set:{segDim:'job'},el:'#grpPanel'}],['Which governorates gained most?',{tab:'groups',el:'#mapPanel'}],['Do participants feel more confident than they know?',{tab:'impact',el:'#quadPanel'}],['How accurate is the Copilot marking?',{tab:'workflow',el:'#agreePanel'}],['How does this cohort compare with earlier ones?',{tab:'cohorts'}]];
+function questionsHtml(){const Qs=[['Did the programme improve knowledge?',{tab:'impact',el:'.hero'}],['Which module needs the most attention?',{tab:'deep',el:'#qPanel'}],['Which questions improved least?',{tab:'deep',el:'#qPanel'}],['Do newer school leaders gain more?',{tab:'groups',set:{segDim:'years'},el:'#grpPanel'}],['Do principals and assistants gain differently?',{tab:'groups',set:{segDim:'job'},el:'#grpPanel'}],['Do participants feel more confident than they know?',{tab:'impact',el:'#quadPanel'}],['How accurate is the Copilot marking?',{tab:'workflow',el:'#agreePanel'}],['How does this cohort compare with earlier ones?',{tab:'cohorts'}]];
   return`<div class="panel mt" id="qStart"><div class="panel-head"><div><h2>Start with a question</h2><p>Pick a question and the dashboard takes you to the chart that answers it.</p></div></div><div class="questions">${Qs.map(([t,o])=>`<button class="qchip" ${goAttr(o)}>${t}</button>`).join('')}</div></div>`}
 /* ---------- key terms page ---------- */
 function renderTerms(){const el=document.getElementById('view-terms');el.innerHTML=`<div class="panel-head" style="margin-bottom:16px"><div><h2 style="font-size:22px">Key terms</h2><p>Plain-language explanations of the words and numbers used in this dashboard. The <span class="info" style="pointer-events:none">?</span> buttons next to headings show the same explanations.</p></div></div>
@@ -1480,7 +1477,7 @@ function switchTab(t){S.tab=t;document.querySelectorAll('.tab').forEach(b=>b.set
 document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)switchTab(b.dataset.tab)});
 let rz;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(S.tab==='impact')renderTab()},200)});
 document.getElementById('fileInput').onchange=e=>{readFile(e.target.files[0],(wb,name)=>{try{loadWorkbook(wb,name);toast(`Loaded ${S.pairs.length} matched participants`)}catch(err){toast(err.message)}});e.target.value=''};
-document.getElementById('lookupInput').onchange=e=>{readFile(e.target.files[0],importLookup);e.target.value=''};
+
 document.getElementById('demoBtn').onclick=()=>{demoData();toast('Demo data loaded')};
 async function initCaps(){const use=n=>window.claude&&window.claude.use?Promise.resolve(window.claude.use(n)).catch(()=>null):Promise.resolve(null);[downloads,sample,db]=await Promise.all([use('downloads'),use('sample'),use('db')]);renderAll();loadHistory()}
 demoData();initCaps();if(msAvailable()){wireGate();updateGate('checking');msInit().then(async()=>{if(MS.account){leaveGate();updateGate();await msAfterSignIn()}else updateGate();renderAll()}).catch(()=>updateGate())}
@@ -1517,6 +1514,7 @@ const AR={
 "Impact":"الأثر",
 "Question by question":"سؤالًا بسؤال",
 "Groups & governorates":"الفئات والمحافظات",
+"Groups":"الفئات",
 "Across cohorts":"مقارنة الأفواج",
 "Marking":"التصحيح",
 "Cohort workflow & accuracy":"خطوات الفوج والدقة",
