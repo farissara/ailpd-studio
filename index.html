@@ -1229,7 +1229,7 @@ function renderCheck(){const el=document.getElementById('view-check');if(S.sourc
 /* ============================== MICROSOFT 365 CONNECTION (hosted version) ============================== */
 const MS_DEFAULT={"clientId": "13d1548e-c0b7-4a37-b7dc-f8a2fc97b784", "tenantId": "1d209e03-a06f-4c48-b124-fd205a748a47", "folder": "AILPD Marking"};
 const MS={cfg:null,pca:null,account:null,job:null,timer:null,pack:null};
-const MS_SCOPES=['User.Read','Files.ReadWrite'];
+const MS_SCOPES=['User.Read','Files.ReadWrite.All'];
 const msAvailable=()=>typeof window.msal!=='undefined';
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const encPath=p=>p.split('/').filter(Boolean).map(encodeURIComponent).join('/');
@@ -1258,13 +1258,21 @@ async function msUpload(path,data,onProg){const blob=data instanceof Blob?data:n
   const s=await gfetch(`/me/drive/root:/${encPath(path)}:/createUploadSession`,{method:'POST',json:{item:{'@microsoft.graph.conflictBehavior':'replace'}}});
   const CH=327680*10;let off=0,res=null;while(off<blob.size){const end=Math.min(off+CH,blob.size);let r,ok=false;for(let t=0;t<4&&!ok;t++){try{r=await fetch(s.uploadUrl,{method:'PUT',headers:{'Content-Range':`bytes ${off}-${end-1}/${blob.size}`},body:blob.slice(off,end)});ok=r.ok||r.status===202}catch(e){}if(!ok)await sleep(1500*(t+1))}
     if(!ok)throw new Error('Upload to OneDrive failed'+(r?' ('+r.status+')':''));if(r.status===200||r.status===201)res=await r.json();off=end;onProg&&onProg(off/blob.size)}return res}
+function shareToken(url){const b=btoa(unescape(encodeURIComponent(url.trim()))).replace(/=+$/,'').replace(/\//g,'_').replace(/\+/g,'-');return 'u!'+b}
+async function msResolveInbox(){const c=MS.cfg;if(!c.inboxLink){await msEnsureFolder(c.folder+'/Inbox');return{mode:'own',label:c.folder+'/Inbox'}}
+  const it=await gfetch(`/shares/${shareToken(c.inboxLink)}/driveItem`);if(!it.folder)throw new Error('The shared link is not a folder');return{mode:'shared',driveId:it.parentReference.driveId,folderId:it.id,label:it.name+(it.shared&&it.shared.owner&&it.shared.owner.user?` (${it.shared.owner.user.displayName})`:'')}}
+async function msUploadTo(inbox,name,data,onProg){if(inbox.mode==='own')return msUpload(`${MS.cfg.folder}/Inbox/${name}`,data,onProg);
+  const blob=data instanceof Blob?data:new Blob([data]);const s=await gfetch(`/drives/${inbox.driveId}/items/${inbox.folderId}:/${encodeURIComponent(name)}:/createUploadSession`,{method:'POST',json:{item:{'@microsoft.graph.conflictBehavior':'replace'}}});
+  const CH=327680*10;let off=0,res=null;while(off<blob.size){const end=Math.min(off+CH,blob.size);let r,ok=false;for(let t=0;t<4&&!ok;t++){try{r=await fetch(s.uploadUrl,{method:'PUT',headers:{'Content-Range':`bytes ${off}-${end-1}/${blob.size}`},body:blob.slice(off,end)});ok=r.ok||r.status===202}catch(e){}if(!ok)await sleep(1500*(t+1))}
+    if(!ok)throw new Error('Upload to OneDrive failed'+(r?' ('+r.status+')':''));if(r.status===200||r.status===201)res=await r.json();off=end;onProg&&onProg(off/blob.size)}return res}
 async function msGetJSON(path){try{const t=await gfetch(`/me/drive/root:/${encPath(path)}:/content`);return typeof t==='string'?JSON.parse(t):t}catch(e){if(e.status===404)return null;throw e}}
 async function msPutJSON(path,obj){const parts=path.split('/');parts.pop();if(parts.length)await msEnsureFolder(parts.join('/'));return gfetch(`/me/drive/root:/${encPath(path)}:/content`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(obj,null,1)})}
-async function msMakeTable(itemId,nRows,nCols){const base=`/me/drive/items/${itemId}/workbook`;const sess=await gfetch(base+'/createSession',{method:'POST',json:{persistChanges:true},retry:true});const H={'workbook-session-id':sess.id};
+const itemBase=(itemId,driveId)=>driveId?`/drives/${driveId}/items/${itemId}`:`/me/drive/items/${itemId}`;
+async function msMakeTable(itemId,nRows,nCols,driveId){const base=itemBase(itemId,driveId)+'/workbook';const sess=await gfetch(base+'/createSession',{method:'POST',json:{persistChanges:true},retry:true});const H={'workbook-session-id':sess.id};
   try{const t=await gfetch(base+'/tables/add',{method:'POST',headers:H,json:{address:`Answers!A1:${colLetter(nCols-1)}${nRows+1}`,hasHeaders:true},retry:true});if(t.name!=='Answers')await gfetch(base+`/tables/${encodeURIComponent(t.id)}`,{method:'PATCH',headers:H,json:{name:'Answers'},retry:true});return t}
   finally{try{await gfetch(base+'/closeSession',{method:'POST',headers:H})}catch(e){}}}
-async function msColumn(itemId,name){const r=await gfetch(`/me/drive/items/${itemId}/workbook/tables('Answers')/columns('${name}')?$select=values`);return(r.values||[]).slice(1).map(v=>v[0])}
-async function msAfterSignIn(){if(!MS.account)return;try{await msEnsureFolder(MS.cfg.folder+'/Inbox')}catch(e){}
+async function msColumn(itemId,name,driveId){const r=await gfetch(`${itemBase(itemId,driveId)}/workbook/tables('Answers')/columns('${name}')?$select=values`);return(r.values||[]).slice(1).map(v=>v[0])}
+async function msAfterSignIn(){if(!MS.account)return;if(!MS.cfg.inboxLink){try{await msEnsureFolder(MS.cfg.folder+'/Inbox')}catch(e){}}
   if(!RUBRIC_OK){try{const p=await msGetJSON(MS.cfg.folder+'/rubric-pack.json');if(p&&applyRubric(p)){MS.pack='onedrive';toast('Rubric pack loaded from OneDrive')}else MS.pack='missing'}catch(e){MS.pack='error'}}else MS.pack=MS.pack||'built-in'
   await loadHistory();resumeJob()}
 /* ---------- sign-in gate ---------- */
@@ -1288,17 +1296,17 @@ async function msMark(onlyMissing){if(!msAvailable())return exportCopilot(onlyMi
   const f=buildCopilotFile(onlyMissing);if(!f){toast('Every written answer already has a mark');return}
   const stamp=new Date().toISOString().slice(0,16).replace(/[-:T]/g,'').replace(/^(\d{8})(\d{4})$/,'$1-$2');const name=`${/^ailpd/i.test(S.cohort)?'':'AILPD '}${S.cohort} - ${stamp}${onlyMissing?' missing':''}.xlsx`.replace(/[\\/:*?"<>|#%]+/g,'-');
   MS.job={state:'upload',name,n:f.rows.length,pct:0,done:0,started:new Date().toISOString(),lastChange:Date.now(),onlyMissing:!!onlyMissing};saveJob();renderJob();
-  try{const folder=MS.cfg.folder+'/Inbox';await msEnsureFolder(folder);const item=await msUpload(`${folder}/${name}`,f.buf,p=>{MS.job.pct=p;renderJob()});MS.job.itemId=item.id;MS.job.webUrl=item.webUrl;MS.job.state='table';saveJob();renderJob();
-    await msMakeTable(item.id,f.rows.length,Object.keys(f.rows[0]).length);
+  try{const inbox=await msResolveInbox();MS.job.inbox=inbox.label;const item=await msUploadTo(inbox,name,f.buf,p=>{MS.job.pct=p;renderJob()});MS.job.itemId=item.id;MS.job.driveId=(item.parentReference&&item.parentReference.driveId)||inbox.driveId||null;MS.job.webUrl=item.webUrl;MS.job.state='table';saveJob();renderJob();
+    await msMakeTable(item.id,f.rows.length,Object.keys(f.rows[0]).length,MS.job.driveId);
     const codes=f.raw.map(x=>x.code);S.roundTrip=onlyMissing&&S.roundTrip?{...S.roundTrip,at:new Date().toISOString().slice(0,10),imported:false}:{at:new Date().toISOString().slice(0,10),codes,imported:false};S.flags.exported=true;saveLocal();
     MS.job.state='marking';MS.job.lastChange=Date.now();saveJob();renderAll();poll()}
   catch(e){MS.job.state='error';MS.job.error=e.message||String(e);saveJob();renderJob();toast('Could not send to Copilot: '+MS.job.error)}}
 async function poll(immediate){stopPoll();const j=MS.job;if(!j||!j.itemId||j.state==='done'||j.state==='error'||!MS.account)return;
   if(!immediate){MS.timer=setTimeout(()=>poll(true),20000);return}
-  try{const st=await msColumn(j.itemId,'Status');const done=st.filter(v=>String(v).trim().toLowerCase()==='done').length;if(done!==j.done){j.done=done;j.lastChange=Date.now()}j.checked=Date.now();j.n=st.length||j.n;
+  try{const st=await msColumn(j.itemId,'Status',j.driveId);const done=st.filter(v=>String(v).trim().toLowerCase()==='done').length;if(done!==j.done){j.done=done;j.lastChange=Date.now()}j.checked=Date.now();j.n=st.length||j.n;
     if(done>=j.n&&j.n>0){j.state='import';saveJob();renderJob();await importJob();return}saveJob();renderJob()}
   catch(e){j.warn=e.message;saveJob();renderJob()}MS.timer=setTimeout(()=>poll(true),20000)}
-async function importJob(){const j=MS.job;try{const names=['Code','AIScore','AIConfidence','AIPoints','AIReason','AIScore2'];const cols=[];for(const n of names){try{cols.push(await msColumn(j.itemId,n))}catch(e){cols.push([])}}
+async function importJob(){const j=MS.job;try{const names=['Code','AIScore','AIConfidence','AIPoints','AIReason','AIScore2'];const cols=[];for(const n of names){try{cols.push(await msColumn(j.itemId,n,j.driveId))}catch(e){cols.push([])}}
     const aoa=[names];for(let i=0;i<cols[0].length;i++)aoa.push(names.map((_,k)=>cols[k][i]??null));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(aoa),'Answers');
     if(S.roundTrip)S.roundTrip.imported=true;importAny(wb,j.name);j.state='done';j.finished=new Date().toISOString();saveJob();const rs=rtStatus();
     toast(`Copilot finished: ${j.n} answers marked${reviewCount()?` · ${reviewCount()} to review`:''}${rs&&rs.missing?` · ${rs.missing} missing`:''}`);renderAll()}
@@ -1323,11 +1331,17 @@ function msPanelHtml(){if(!msAvailable())return'';const c=msCfg(),signed=!!MS.ac
       <details ${msConfigured()?'':'open'}><summary>Connection details</summary><div class="controls mt" style="margin-bottom:0"><label class="field">Application (client) ID<input type="text" id="msClient" value="${esc(c.clientId)}" placeholder="00000000-0000-0000-0000-000000000000" style="width:300px"></label>
         <label class="field">Directory (tenant) ID<input type="text" id="msTenant" value="${esc(c.tenantId)}" placeholder="00000000-0000-0000-0000-000000000000" style="width:300px"></label><label class="field">OneDrive folder<input type="text" id="msFolder" value="${esc(c.folder)}" style="width:180px"></label><button class="btn" id="msSave">Save</button></div>
         <p class="small muted mt">From Microsoft Entra ID → App registrations → your app → Overview. Redirect URI to register (Single-page application): <code>${esc(location.origin+location.pathname)}</code></p></details>
+      <div class="note"><b>Copilot Inbox:</b> <span>${c.inboxLink?'A folder shared with you (the flow owner\'s Inbox)':'Your own OneDrive'}</span> ${c.inboxLink?'':`<code>${esc(c.folder)}/Inbox</code>`}
+        <p class="small" style="margin-top:6px">If the marking flow runs under someone else's account, ask them to share their <b>AILPD Marking/Inbox</b> folder with you (Can edit) and paste the folder link here.</p>
+        <div class="controls mt" style="margin-bottom:0"><label class="field" style="flex:1;min-width:240px">Shared Inbox folder link<input type="text" id="msInbox" value="${esc(c.inboxLink||'')}" placeholder="https://…sharepoint.com/:f:/…"></label><button class="btn" id="msInboxSave">Save link</button>${c.inboxLink?'<button class="btn ghost" id="msInboxClear">Use my own OneDrive</button>':''}${signed?'<button class="btn ghost" id="msInboxTest">Test</button>':''}</div></div>
       <div class="note"><b>Rubric pack:</b> <span>${RUBRIC_OK?(MS.pack==='onedrive'?'Loaded from your OneDrive':'Loaded'):'Not loaded'}</span>. <span>The marking rubric is kept out of the public page. It loads from</span> <code>${esc(c.folder)}/rubric-pack.json</code> <span>after you sign in.</span>
         <div class="actions mt"><span class="btn file-btn">Load rubric pack file<input type="file" id="packInput" accept=".json,application/json"></span>${RUBRIC_OK?'<button class="btn ghost" id="packExport">Download rubric pack</button>':''}</div></div></div></div>`}
 function wireMsPanel(root){const q=id=>root.querySelector('#'+id);if(!q('msPanel')&&!root.querySelector('#msIn')&&!root.querySelector('#msOut'))return;
   const si=q('msIn');if(si)si.onclick=()=>msSignIn();const so=q('msOut');if(so)so.onclick=()=>msSignOut();
-  const sv=q('msSave');if(sv)sv.onclick=()=>{msSaveCfg({clientId:q('msClient').value.trim(),tenantId:q('msTenant').value.trim(),folder:q('msFolder').value.trim()||'AILPD Marking'});toast('Saved');renderAll()};
+  const sv=q('msSave');if(sv)sv.onclick=()=>{msSaveCfg({...msCfg(),clientId:q('msClient').value.trim(),tenantId:q('msTenant').value.trim(),folder:q('msFolder').value.trim()||'AILPD Marking'});toast('Saved');renderAll()};
+  const isv=q('msInboxSave');if(isv)isv.onclick=()=>{const c=msCfg();c.inboxLink=q('msInbox').value.trim();try{localStorage.setItem('ailpd-ms',JSON.stringify(c))}catch(e){}MS.cfg=c;toast(c.inboxLink?'Shared Inbox saved':'Saved');renderAll()};
+  const icl=q('msInboxClear');if(icl)icl.onclick=()=>{const c=msCfg();c.inboxLink='';try{localStorage.setItem('ailpd-ms',JSON.stringify(c))}catch(e){}MS.cfg=c;renderAll()};
+  const ite=q('msInboxTest');if(ite)ite.onclick=async()=>{try{MS.cfg=msCfg();const ib=await msResolveInbox();toast('Inbox OK: '+ib.label)}catch(e){toast('Could not open the Inbox: '+(e.message||e))}};
   const pi=q('packInput');if(pi)pi.onchange=e=>{const f=e.target.files[0];if(!f)return;const fr=new FileReader();fr.onload=()=>{try{installPack(JSON.parse(fr.result))}catch(err){toast('That file is not a valid rubric pack')}};fr.readAsText(f);e.target.value=''};
   const pe=q('packExport');if(pe)pe.onclick=()=>saveFile('rubric-pack.json',JSON.stringify(exportPack(),null,1))}
 
@@ -2026,6 +2040,11 @@ const AR={
 "Checking your sign-in…":"جارٍ التحقق من تسجيل الدخول…","Opening Microsoft sign-in…":"جارٍ فتح تسجيل الدخول إلى Microsoft…",
 "Sign-in did not complete. Try again, and allow pop-ups for this site if the window was blocked.":"لم يكتمل تسجيل الدخول. حاول مجددًا، واسمح بالنوافذ المنبثقة لهذا الموقع إذا حُجبت النافذة.",
 "Please sign in with your QRTA account":"يرجى تسجيل الدخول بحساب الأكاديمية",
+
+"Copilot Inbox:":"مجلد Inbox لـ Copilot:","A folder shared with you (the flow owner's Inbox)":"مجلد تمت مشاركته معك (Inbox صاحب المسار)","Your own OneDrive":"OneDrive الخاص بك",
+"If the marking flow runs under someone else's account, ask them to share their":"إذا كان مسار التصحيح يعمل بحساب شخص آخر، اطلب منه مشاركة مجلد","folder with you (Can edit) and paste the folder link here.":"معك (صلاحية التعديل) والصق رابط المجلد هنا.",
+"Shared Inbox folder link":"رابط مجلد Inbox المشترك","Save link":"حفظ الرابط","Use my own OneDrive":"استخدام OneDrive الخاص بي","Test":"اختبار","Shared Inbox saved":"حُفظ مجلد Inbox المشترك",
+"The shared link is not a folder":"الرابط المشترك ليس مجلدًا",
 /* ---------- toasts & errors ---------- */
 "Every written answer already has a mark":"كل إجابة مكتوبة لديها علامة بالفعل",
 "Tip: mark the calibration set first so Copilot gets worked examples":"نصيحة: صحّح عينة المعايرة أولًا ليحصل Copilot على أمثلة محلولة",
@@ -2092,6 +2111,8 @@ const RULES=[
  [/^Read from the raw sheets because “(.*)” \/ “(.*)” could not be read reliably\. Raw sheets include people the clean sheets removed: check with M&E\.$/,m=>`قُرئت البيانات من الأوراق الخام لأن «${m[1]}» / «${m[2]}» لم تُقرأ بشكل موثوق. تضم الأوراق الخام أشخاصًا حُذفوا من الأوراق النظيفة: تحقق مع المتابعة والتقييم.`],
  [/^Could not send to Copilot: (.+)$/,m=>`تعذّر الإرسال إلى Copilot: ${F(m[1])}`],
  [/^(.+) \((\d+)\)$/,m=>{const a=T(m[1]);return a?`${a} (${m[2]})`:null}],
+ [/^Inbox OK: (.+)$/,m=>`مجلد Inbox جاهز: ${m[1]}`],
+ [/^Could not open the Inbox: (.+)$/,m=>`تعذّر فتح مجلد Inbox: ${F(m[1])}`],
  [/^“(.*)” \(no real answer\)$/,m=>`“${m[1]}” (ليست إجابة فعلية)`],
  [/^Not matched to a governorate: (.+)$/,m=>`لم تُطابَق مع محافظة: ${m[1]}`],
 ];
