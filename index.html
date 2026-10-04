@@ -1235,14 +1235,21 @@ function msSaveCfg(c){try{localStorage.setItem('ailpd-ms',JSON.stringify(c))}cat
 const msConfigured=()=>{const c=msCfg();return !!(c.clientId&&c.tenantId)};
 async function msInit(){if(!msAvailable())return null;MS.cfg=msCfg();if(!MS.cfg.clientId||!MS.cfg.tenantId)return null;if(MS.pca)return MS.pca;
   const pca=new msal.PublicClientApplication({auth:{clientId:MS.cfg.clientId,authority:'https://login.microsoftonline.com/'+MS.cfg.tenantId,redirectUri:location.origin+location.pathname},cache:{cacheLocation:'localStorage'}});
-  await pca.initialize();try{const r=await pca.handleRedirectPromise();if(r&&r.account)pca.setActiveAccount(r.account)}catch(e){}
+  await pca.initialize();try{const r=await pca.handleRedirectPromise();if(r&&r.account)pca.setActiveAccount(r.account)}catch(e){}msClearStuck();
   const acc=pca.getActiveAccount()||pca.getAllAccounts()[0];if(acc){pca.setActiveAccount(acc);MS.account=acc}MS.pca=pca;return pca}
 async function msSignIn(){const pca=await msInit();if(!pca){toast('Add the Microsoft connection details first');openMsPanel();return false}
-  try{const r=await pca.loginPopup({scopes:MS_SCOPES,prompt:'select_account'});if(/^[0-9a-f-]{36}$/i.test(MS.cfg.tenantId)&&r.account.tenantId&&r.account.tenantId.toLowerCase()!==MS.cfg.tenantId.toLowerCase()){try{await pca.logoutPopup({account:r.account})}catch(e){}toast('Please sign in with your QRTA account');return false}pca.setActiveAccount(r.account);MS.account=r.account;toast('Signed in to Microsoft');await msAfterSignIn();renderAll();return true}
-  catch(e){const c=String(e&&(e.errorCode||e.message)||'');if(/popup_window|blocked/i.test(c)){await pca.loginRedirect({scopes:MS_SCOPES});return false}toast('Microsoft sign-in did not complete');renderAll();return false}}
+  if(MS.signingIn)return false;MS.signingIn=true;try{const r=await msInteract(()=>pca.loginPopup({scopes:MS_SCOPES,prompt:'select_account'}));if(/^[0-9a-f-]{36}$/i.test(MS.cfg.tenantId)&&r.account.tenantId&&r.account.tenantId.toLowerCase()!==MS.cfg.tenantId.toLowerCase()){try{await pca.logoutPopup({account:r.account})}catch(e){}toast('Please sign in with your QRTA account');return false}pca.setActiveAccount(r.account);MS.account=r.account;toast('Signed in to Microsoft');await msAfterSignIn();renderAll();return true}
+  catch(e){const c=String(e&&(e.errorCode||e.message)||'');if(/popup_window|blocked/i.test(c)){await pca.loginRedirect({scopes:MS_SCOPES});return false}toast(e&&e.code==='consent'?e.message:'Microsoft sign-in did not complete');renderAll();return false}finally{MS.signingIn=false}}
 async function msSignOut(){const acc=MS.account;MS.account=null;stopPoll();if(MS.pca&&acc){try{await MS.pca.logoutPopup({account:acc})}catch(e){}}S.setupBypass=false;updateGate();renderAll()}
 async function msToken(){const pca=await msInit();if(!pca||!MS.account){const e=new Error('Sign in to Microsoft first');e.code='signin';throw e}
-  try{return(await pca.acquireTokenSilent({scopes:MS_SCOPES,account:MS.account})).accessToken}catch(e){return(await pca.acquireTokenPopup({scopes:MS_SCOPES})).accessToken}}
+  try{return(await pca.acquireTokenSilent({scopes:MS_SCOPES,account:MS.account})).accessToken}catch(e){
+    if(!MS.tokenP)MS.tokenP=(async()=>{try{return await msInteract(()=>pca.acquireTokenPopup({scopes:MS_SCOPES,account:MS.account}))}finally{MS.tokenP=null}})();
+    return(await MS.tokenP).accessToken}}
+function msClearStuck(){for(const st of[sessionStorage,localStorage]){try{for(let i=st.length-1;i>=0;i--){const k=st.key(i);if(k&&/interaction\.status|interaction_status/i.test(k))st.removeItem(k)}}catch(e){}}}
+async function msInteract(fn){try{return await fn()}catch(e){const c=String(e&&(e.errorCode||e.message)||'');
+  if(/interaction_in_progress/i.test(c)){msClearStuck();await sleep(300);return await fn()}
+  if(/consent_required|admin|AADSTS65001|AADSTS90094/i.test(c)){const er=new Error('Your organisation needs to approve the app’s file permission (Files.ReadWrite.All). Ask IT to grant admin consent in Entra.');er.code='consent';throw er}
+  throw e}}
 async function gfetch(path,opts={},tries=0){const t=await msToken();const url=path.startsWith('http')?path:'https://graph.microsoft.com/v1.0'+path;const h={Authorization:'Bearer '+t,...(opts.headers||{})};let body=opts.body;if(opts.json!==undefined){h['Content-Type']='application/json';body=JSON.stringify(opts.json)}
   let r;try{r=await fetch(url,{method:opts.method||'GET',headers:h,body})}catch(e){if(tries<3){await sleep(2000*(tries+1));return gfetch(path,opts,tries+1)}throw new Error('Network error: check your connection')}
   if((r.status===429||r.status===503||r.status===504||(opts.retry&&(r.status===409||r.status===404||r.status===500)))&&tries<(opts.retry?10:5)){const ra=+r.headers.get('Retry-After')||Math.min(30,2*2**tries);await sleep(ra*1000);return gfetch(path,opts,tries+1)}
@@ -1782,7 +1789,7 @@ const AR={
 "You don't have permission to save cohorts on this page":"لا تملك صلاحية حفظ الأفواج في هذه الصفحة",
 
 /* ---------- marking ---------- */
-"Calibration set":"عينة المعايرة","Send a test":"إرسال تجربة","Sends one answer per question so you can check the flow works":"يرسل إجابة واحدة لكل سؤال للتأكد من أن سير العمل يعمل","Every written answer already has a mark. To check the connection, use “Send a test”.":"كل الإجابات المكتوبة مصحَّحة. للتحقق من الاتصال استخدم «إرسال تجربة».","Test run":"تشغيل تجريبي","Needs review":"بحاجة إلى مراجعة","Unmarked":"غير مصحَّحة","All answers":"جميع الإجابات",
+"Calibration set":"عينة المعايرة","Send a test":"إرسال تجربة","Your organisation needs to approve the app’s file permission (Files.ReadWrite.All). Ask IT to grant admin consent in Entra.":"تحتاج مؤسستك إلى الموافقة على صلاحية الملفات للتطبيق (Files.ReadWrite.All). اطلب من قسم تقنية المعلومات منح موافقة المسؤول في Entra.","Sends one answer per question so you can check the flow works":"يرسل إجابة واحدة لكل سؤال للتأكد من أن سير العمل يعمل","Every written answer already has a mark. To check the connection, use “Send a test”.":"كل الإجابات المكتوبة مصحَّحة. للتحقق من الاتصال استخدم «إرسال تجربة».","Test run":"تشغيل تجريبي","Needs review":"بحاجة إلى مراجعة","Unmarked":"غير مصحَّحة","All answers":"جميع الإجابات",
 "Which answers":"أي الإجابات",
 "Mark these first. Half become worked examples for Copilot; the other half measure how closely Copilot agrees with M&E.":"صحّح هذه أولًا. نصفها يصبح أمثلة محلولة لـ Copilot، والنصف الآخر يقيس مدى اتفاق Copilot مع المتابعة والتقييم.",
 "Copilot was unsure, or its two runs disagreed. Confirm or correct each one.":"لم يكن Copilot متأكدًا، أو اختلفت نتيجتا تشغيله. أكّد كل إجابة أو صحّحها.",
