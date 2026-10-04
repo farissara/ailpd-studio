@@ -1264,7 +1264,11 @@ async function msUpload(path,data,onProg){const blob=data instanceof Blob?data:n
     if(!ok)throw new Error('Upload to OneDrive failed'+(r?' ('+r.status+')':''));if(r.status===200||r.status===201)res=await r.json();off=end;onProg&&onProg(off/blob.size)}return res}
 function shareToken(url){const b=btoa(unescape(encodeURIComponent(url.trim()))).replace(/=+$/,'').replace(/\//g,'_').replace(/\+/g,'-');return 'u!'+b}
 async function msResolveInbox(){const c=MS.cfg;if(!c.inboxLink){await msEnsureFolder(c.folder+'/Inbox');return{mode:'own',label:c.folder+'/Inbox'}}
-  const it=await gfetch(`/shares/${shareToken(c.inboxLink)}/driveItem`);if(!it.folder)throw new Error('The shared link is not a folder');return{mode:'shared',driveId:it.parentReference.driveId,folderId:it.id,label:it.name+(it.shared&&it.shared.owner&&it.shared.owner.user?` (${it.shared.owner.user.displayName})`:'')}}
+  const it=await gfetch(`/shares/${shareToken(c.inboxLink)}/driveItem`);if(!it.folder)throw new Error('The shared link is not a folder');const own=it.shared&&it.shared.owner&&it.shared.owner.user;const drv=it.parentReference.driveId;
+  if(String(it.name).trim().toLowerCase()!=='inbox'){let ib=null;try{ib=await gfetch(`/drives/${drv}/items/${it.id}:/Inbox`)}catch(e){if(e.status!==404)throw e}
+    if(!ib)ib=await gfetch(`/drives/${drv}/items/${it.id}/children`,{method:'POST',json:{name:'Inbox',folder:{},'@microsoft.graph.conflictBehavior':'fail'}});
+    if(!ib.folder)throw new Error('“Inbox” inside the shared folder is not a folder');return{mode:'shared',driveId:drv,folderId:ib.id,label:it.name+'/Inbox'+(own?` (${own.displayName})`:'')}}
+  return{mode:'shared',driveId:drv,folderId:it.id,label:it.name+(it.shared&&it.shared.owner&&it.shared.owner.user?` (${it.shared.owner.user.displayName})`:'')}}
 async function msUploadTo(inbox,name,data,onProg){if(inbox.mode==='own')return msUpload(`${MS.cfg.folder}/Inbox/${name}`,data,onProg);
   const blob=data instanceof Blob?data:new Blob([data]);const s=await gfetch(`/drives/${inbox.driveId}/items/${inbox.folderId}:/${encodeURIComponent(name)}:/createUploadSession`,{method:'POST',json:{item:{'@microsoft.graph.conflictBehavior':'replace'}}});
   const CH=327680*10;let off=0,res=null;while(off<blob.size){const end=Math.min(off+CH,blob.size);let r,ok=false;for(let t=0;t<4&&!ok;t++){try{r=await fetch(s.uploadUrl,{method:'PUT',headers:{'Content-Range':`bytes ${off}-${end-1}/${blob.size}`},body:blob.slice(off,end)});ok=r.ok||r.status===202}catch(e){}if(!ok)await sleep(1500*(t+1))}
