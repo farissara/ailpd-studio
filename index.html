@@ -85,10 +85,10 @@ class En{constructor(e,t,r,n,o,i,a,s){this.canonicalAuthority=e,this._canonicalA
 :root{
   --bg:#f3f5f7; --surface:#ffffff; --surface-2:#edf0f3; --ink:#111a24; --ink-2:#4a5462; --muted:#7f8895;
   --line:#dde2e8; --line-2:#c7ced7;
-  --pre:#9aa1ac; --post:#2a78d6; --post-soft:#dbe8f8; --accent:#1c5cab;
+  --pre:#a3adb8; --post:#12606c; --post-soft:#dcedef; --accent:#0e5560;
   --good:#006300; --good-bg:#e1f1e1; --warn:#8a5a00; --warn-bg:#fcefd4; --bad:#b42f2f; --bad-bg:#fae3e3;
   --neg:#d03b3b; --hatch:#e4e7eb;
-  --hero:#0e1c2a; --hero-2:#16293b; --hero-ink:#f3f7fb; --hero-mute:#9fb0c2; --hero-post:#6da7ec; --hero-pre:#8c98a6;
+  --hero:#0b3239; --hero-2:#12505a; --hero-ink:#f2f8f8; --hero-mute:#a9c3c6; --hero-post:#7fd0da; --hero-pre:#9fb3b6;
   --shadow:0 1px 2px rgba(17,26,36,.05),0 6px 20px rgba(17,26,36,.05);
   --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
@@ -99,19 +99,19 @@ class En{constructor(e,t,r,n,o,i,a,s){this.canonicalAuthority=e,this._canonicalA
   color-scheme:dark;
   --bg:#0d0f13; --surface:#161a20; --surface-2:#1f242b; --ink:#eef1f5; --ink-2:#b5bcc7; --muted:#838c98;
   --line:#272c34; --line-2:#394049;
-  --pre:#6c737e; --post:#4a93ea; --post-soft:#1c2c42; --accent:#86b6ef;
+  --pre:#66727f; --post:#4db2c1; --post-soft:#173238; --accent:#7fd0da;
   --good:#3fbf3f; --good-bg:#15281a; --warn:#f0b43c; --warn-bg:#2d2412; --bad:#ec7070; --bad-bg:#311a1a;
   --neg:#e66767; --hatch:#262b33;
-  --hero:#101d2b; --hero-2:#172a3d; --shadow:0 1px 2px rgba(0,0,0,.4);
+  --hero:#0d2a30; --hero-2:#123d45; --shadow:0 1px 2px rgba(0,0,0,.4);
 }}
 :root[data-theme="dark"]{
   color-scheme:dark;
   --bg:#0d0f13; --surface:#161a20; --surface-2:#1f242b; --ink:#eef1f5; --ink-2:#b5bcc7; --muted:#838c98;
   --line:#272c34; --line-2:#394049;
-  --pre:#6c737e; --post:#4a93ea; --post-soft:#1c2c42; --accent:#86b6ef;
+  --pre:#66727f; --post:#4db2c1; --post-soft:#173238; --accent:#7fd0da;
   --good:#3fbf3f; --good-bg:#15281a; --warn:#f0b43c; --warn-bg:#2d2412; --bad:#ec7070; --bad-bg:#311a1a;
   --neg:#e66767; --hatch:#262b33;
-  --hero:#101d2b; --hero-2:#172a3d; --shadow:0 1px 2px rgba(0,0,0,.4);
+  --hero:#0d2a30; --hero-2:#123d45; --shadow:0 1px 2px rgba(0,0,0,.4);
 }
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -167,7 +167,7 @@ button{cursor:pointer}
 .note.warn{background:var(--warn-bg);color:var(--warn)}
 
 .hero{background:linear-gradient(135deg,var(--hero),var(--hero-2));color:var(--hero-ink);border-radius:16px;padding:26px 28px;margin-bottom:16px;position:relative;overflow:hidden}
-.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(109,167,236,.18),transparent 70%);pointer-events:none}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(127,208,218,.18),transparent 70%);pointer-events:none}
 .hero .eyebrow{color:var(--hero-mute)}
 .hero h2{font-family:var(--cond);font-size:clamp(24px,3.4vw,36px);font-weight:600;letter-spacing:-.01em;margin-top:6px;max-width:26ch}
 .hero h2 em{font-style:normal;color:var(--hero-post)}
@@ -349,6 +349,84 @@ kbd{font-family:var(--mono);font-size:12px;border:1px solid var(--line-2);border
   .panel,.mod,.hero{break-inside:avoid} .grid.g2{grid-template-columns:1fr 1fr}
   *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
+/* ---------- TEPD-style shell ---------- */
+.hs .v{white-space:nowrap;font-size:clamp(22px,2.3vw,32px)}
+.chip{flex:none}
+.mods{grid-template-columns:repeat(2,minmax(0,1fr))}@media(min-width:1500px){.mods{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:640px){.mods{grid-template-columns:1fr}}
+.shell{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;overflow:auto;background:var(--surface);border-inline-end:1px solid var(--line);padding:20px 14px;display:flex;flex-direction:column;gap:16px;z-index:6}
+.side .brand .mark{display:inline-block;font-weight:700;font-size:11px;letter-spacing:.14em;color:#fff;background:var(--post);padding:3px 7px;border-radius:4px;margin-bottom:8px;direction:ltr}
+.side .brand h1{font-size:16px;font-weight:700;line-height:1.3;margin:0}
+.side .brand p{font-size:12px;color:var(--muted);margin-top:4px}
+nav.sections{display:flex;flex-direction:column;gap:2px}
+.navlab{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:12px 10px 4px}
+html[dir=rtl] .navlab{letter-spacing:0}
+nav.sections .tab{all:unset;cursor:pointer;display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;font-size:13.5px;color:var(--ink-2)}
+nav.sections .tab:hover{background:var(--surface-2);color:var(--ink)}
+nav.sections .tab[aria-selected="true"]{background:var(--post);color:#fff;font-weight:600}
+nav.sections .tab[aria-selected="true"] .count{color:rgba(255,255,255,.8)}
+nav.sections .tab:focus-visible{outline:2px solid var(--post);outline-offset:2px}
+.ni{width:16px;text-align:center;opacity:.75;font-size:12px;flex:none}
+.side-tools{margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.side-tools .btn{justify-content:center}
+.side-tools .seg{display:flex}.side-tools .seg button{flex:1}
+.wrap{max-width:1240px;margin:0;padding:18px clamp(14px,2.6vw,36px) 64px;min-width:0}
+.top{padding:0 0 12px;justify-content:flex-end}
+html.present{font-size:16px}
+html.present body{font-size:16px}
+html.present .status,html.present .top,html.present nav.sections .tab[data-tab="check"],html.present nav.sections .tab[data-tab="marking"],html.present nav.sections .tab[data-tab="workflow"],html.present .navlab:nth-of-type(2),html.present #aiPanel .actions,html.present .welcome{display:none!important}
+html.present .hero h2{font-size:clamp(30px,4vw,46px)}
+html.present .panel-head h2{font-size:20px}
+html.present .panel-head p,html.present .takeaway{font-size:15px}
+@media (max-width:960px){
+  .shell{grid-template-columns:1fr}
+  .side{position:sticky;top:0;height:auto;flex-direction:column;gap:8px;padding:10px 12px;border-inline-end:0;border-bottom:1px solid var(--line)}
+  .side .brand p,.navlab{display:none}
+  .side .brand{display:flex;align-items:center;gap:8px}.side .brand .mark{margin:0}
+  nav.sections{flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:2px}
+  nav.sections .tab{white-space:nowrap;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px}
+  .ni{display:none}
+  .side-tools{flex-direction:row;flex-wrap:wrap;margin:0}
+  .side-tools .btn{padding:5px 10px;font-size:12.5px}
+}
+/* takeaways, info popovers, questions, key messages */
+.takeaway{display:flex;gap:10px;align-items:flex-start;background:var(--surface-2);border-inline-start:4px solid var(--post);border-radius:8px;padding:10px 14px;margin:0 0 14px;font-size:14px;line-height:1.55;max-width:95ch}
+.takeaway.warn{border-inline-start-color:var(--warn)}
+.takeaway b.tk{white-space:nowrap;color:var(--accent)}
+.info{all:unset;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:50%;border:1.5px solid var(--muted);color:var(--muted);font-size:10.5px;font-weight:700;line-height:1;margin-inline-start:6px;vertical-align:1px;flex:none}
+.info:hover,.info[aria-expanded="true"]{border-color:var(--post);background:var(--post);color:#fff}
+.info:focus-visible{outline:2px solid var(--post);outline-offset:2px}
+.popover{position:absolute;z-index:70;max-width:320px;background:var(--ink);color:var(--surface);padding:11px 13px;border-radius:9px;font-size:13px;line-height:1.55;box-shadow:0 8px 28px rgba(0,0,0,.25)}
+.popover b{display:block;margin-bottom:3px}
+.questions{display:flex;flex-wrap:wrap;gap:8px}
+.qchip{all:unset;cursor:pointer;border:1px solid var(--line-2);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:13.5px;line-height:1.3}
+.qchip:hover{border-color:var(--post);color:var(--accent)}
+.qchip:focus-visible{outline:2px solid var(--post);outline-offset:2px}
+.showme{all:unset;cursor:pointer;color:var(--accent);font-weight:600;font-size:12.5px;text-decoration:underline;text-underline-offset:3px;margin-inline-start:6px;white-space:nowrap}
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px}
+.term{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.term h3{font-size:15px;margin-bottom:4px} .term p{color:var(--ink-2);font-size:13.5px;line-height:1.6}
+.term .eg{margin-top:6px;font-size:12.5px;color:var(--muted)}
+.flash{animation:flash 1.6s ease}
+@keyframes flash{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--post) 60%,transparent)}100%{box-shadow:0 0 0 14px transparent}}
+/* one-page summary sheet */
+.sheet{background:#fff;color:#18212e;border:1px solid var(--line);border-radius:12px;padding:28px 32px;max-width:880px;font-size:13px;line-height:1.5}
+.sheet .sh-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;border-bottom:2px solid #12606c;padding-bottom:12px;margin-bottom:14px}
+.sheet .sh-org{font-size:12px;color:#566273}.sheet h2{font-size:21px;margin:2px 0}.sheet .sh-prog{font-size:13px;color:#566273}
+.sheet .sh-mark{font-weight:700;letter-spacing:.12em;color:#fff;background:#12606c;padding:4px 8px;border-radius:4px;font-size:11px;direction:ltr;flex:none}
+.sheet h3{font-size:14px;margin:16px 0 6px;color:#12606c}
+.sheet .sh-figs{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid #d7dfe6;border-radius:8px}
+.sheet .sh-figs div{padding:9px 11px;border-inline-end:1px solid #d7dfe6}.sheet .sh-figs div:last-child{border-inline-end:0}
+.sheet .sh-figs b{display:block;font-size:18px;font-variant-numeric:tabular-nums}.sheet .sh-figs span{font-size:11.5px;color:#566273}
+.sheet .sh-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.sheet table{font-size:12px} .sheet th,.sheet td{padding:4px 6px;border-bottom:1px solid #e3e8ed;color:#18212e}.sheet th{background:#eef3f5;color:#40505f;text-transform:none;letter-spacing:0}
+.sheet ul{margin:2px 0;padding-inline-start:18px}.sheet li{margin-bottom:4px}
+.sheet .sh-foot{margin-top:14px;padding-top:8px;border-top:1px solid #d7dfe6;font-size:11px;color:#566273}
+.sheet .mini{display:flex;height:8px;border-radius:4px;background:#e6ecef;overflow:hidden;min-width:60px}.sheet .mini i{background:#12606c;display:block}
+@media (max-width:700px){.sheet{padding:16px}.sheet .sh-cols{grid-template-columns:1fr}.sheet .sh-figs{grid-template-columns:1fr 1fr}}
+@media print{.shell{display:block}.side{display:none!important}.wrap{padding:0;max-width:none}
+  body.print-summary .wrap>*:not(#view-summary){display:none!important} body.print-summary #view-summary{display:block!important} body.print-summary .sheet{border:0;padding:0;max-width:none}
+  .info,.showme,.questions{display:none!important}}
 /* ---------- language & theme ---------- */
 .seg.lang button{padding:6px 11px}
 .btn.icon{padding:7px 9px;line-height:0}
@@ -364,41 +442,48 @@ html[dir=rtl] .answer.empty{direction:rtl;text-align:right;font-family:var(--ara
 html[dir=rtl] .brand p{max-width:70ch}
 </style>
 
-<div class="wrap">
-  <header class="top">
-    <div class="brand">
-      <div class="eyebrow">QRTA · Monitoring &amp; Evaluation</div>
-      <h1>AILPD Pre/Post Studio</h1>
-      <p>Marks the Advanced Instructional Leadership Diploma pre/post survey and shows what each cohort gained. Workbooks are read inside this browser and never uploaded.</p>
-    </div>
-    <div class="actions">
-      <span class="btn primary file-btn">Open survey workbook<input type="file" id="fileInput" accept=".xlsx,.xls,.csv" aria-label="Open survey workbook"></span>
-      <span class="btn file-btn">Add governorate list<input type="file" id="lookupInput" accept=".xlsx,.xls,.csv" aria-label="Add ID to governorate list"></span>
-      <button class="btn ghost" id="demoBtn">Reload demo</button>
+<div class="shell">
+  <aside class="side" aria-label="Menu">
+    <div class="brand"><div class="mark" aria-hidden="true">QRTA</div><h1>AILPD Pre/Post Studio</h1><p>Advanced Instructional Leadership Diploma · pre/post results</p></div>
+    <nav class="sections" role="tablist" id="tabs" aria-label="Sections">
+      <div class="navlab">Results</div>
+      <button class="tab" role="tab" data-tab="impact" aria-selected="true"><span class="ni">◎</span>Overview</button>
+      <button class="tab" role="tab" data-tab="deep"><span class="ni">▤</span>Question by question</button>
+      <button class="tab" role="tab" data-tab="groups"><span class="ni">◫</span>Groups &amp; governorates</button>
+      <button class="tab" role="tab" data-tab="cohorts"><span class="ni">↗</span>Across cohorts</button>
+      <button class="tab" role="tab" data-tab="summary"><span class="ni">▭</span>One-page summary</button>
+      <div class="navlab">Marking</div>
+      <button class="tab" role="tab" data-tab="check"><span class="ni">✓</span>Data check<span class="count" id="checkCount"></span></button>
+      <button class="tab" role="tab" data-tab="marking"><span class="ni">✎</span>Marking<span class="count" id="markCount"></span></button>
+      <button class="tab" role="tab" data-tab="workflow"><span class="ni">⚙</span>Workflow &amp; accuracy</button>
+      <div class="navlab">Help</div>
+      <button class="tab" role="tab" data-tab="terms"><span class="ni">?</span>Key terms</button>
+    </nav>
+    <div class="side-tools" id="sideTools">
+      <button class="btn" id="presentBtn" aria-pressed="false">Presentation mode</button>
       <button class="btn" id="msBtn" hidden></button>
     </div>
-  </header>
-
-  <div class="status" id="status"></div>
-
-  <nav class="tabs" role="tablist" id="tabs">
-    <button class="tab" role="tab" data-tab="impact" aria-selected="true">Impact</button>
-    <button class="tab" role="tab" data-tab="deep">Question by question</button>
-    <button class="tab" role="tab" data-tab="groups">Groups &amp; governorates</button>
-    <button class="tab" role="tab" data-tab="cohorts">Across cohorts</button>
-    <button class="tab" role="tab" data-tab="check">Data check<span class="count" id="checkCount"></span></button>
-    <button class="tab" role="tab" data-tab="marking">Marking<span class="count" id="markCount"></span></button>
-    <button class="tab" role="tab" data-tab="workflow">Cohort workflow &amp; accuracy</button>
-  </nav>
-
-  <div id="focusBar" hidden></div>
-  <section id="view-impact"></section>
-  <section id="view-deep" hidden></section>
-  <section id="view-groups" hidden></section>
-  <section id="view-cohorts" hidden></section>
-  <section id="view-check" hidden></section>
-  <section id="view-marking" hidden></section>
-  <section id="view-workflow" hidden></section>
+  </aside>
+  <main class="wrap">
+    <header class="top">
+      <div class="actions">
+        <span class="btn primary file-btn">Open survey workbook<input type="file" id="fileInput" accept=".xlsx,.xls,.csv" aria-label="Open survey workbook"></span>
+        <span class="btn file-btn">Add governorate list<input type="file" id="lookupInput" accept=".xlsx,.xls,.csv" aria-label="Add ID to governorate list"></span>
+        <button class="btn ghost" id="demoBtn">Reload demo</button>
+      </div>
+    </header>
+    <div class="status" id="status"></div>
+    <div id="focusBar" hidden></div>
+    <section id="view-impact"></section>
+    <section id="view-deep" hidden></section>
+    <section id="view-groups" hidden></section>
+    <section id="view-cohorts" hidden></section>
+    <section id="view-summary" hidden></section>
+    <section id="view-check" hidden></section>
+    <section id="view-marking" hidden></section>
+    <section id="view-workflow" hidden></section>
+    <section id="view-terms" hidden></section>
+  </main>
 </div>
 <div id="tip" hidden></div>
 
@@ -682,50 +767,54 @@ function renderStatus(){const m=S.meta,cov=coverage(),cs=calStats(),rv=reviewCou
     <button class="chip info" id="jobChip" hidden style="border:0;cursor:pointer"></button><span class="spacer"></span><button class="btn ghost" id="printBtn" title="Print or save as PDF"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4a1 1 0 01-1-1v-6a2 2 0 012-2h14a2 2 0 012 2v6a1 1 0 01-1 1h-2M7 14h10v7H7z"/></svg><span>Print / PDF</span></button><button class="btn ghost" id="kbBtn" aria-label="Keyboard shortcuts" title="Keyboard shortcuts">?</button><button class="btn" id="exportBtn">Export results (.xlsx)</button>`;
   document.getElementById('markCount').textContent=cs.left?cs.left+' calibration':(rv?rv+' review':'');
   const cc=document.getElementById('checkCount');if(cc){let t='';if(S.meta.audit){try{const P=preflight();t=P.fail?P.fail+' to fix':'✓'}catch(e){}}cc.textContent=t}
-  document.getElementById('printBtn').onclick=()=>{document.body.dataset.printed=new Date().toLocaleDateString(S.lang==='ar'?'ar-JO':'en-GB',{day:'numeric',month:'long',year:'numeric'});window.print()};document.getElementById('kbBtn').onclick=showShortcuts;const jc=document.getElementById('jobChip');if(jc)jc.onclick=()=>switchTab('check');renderJob();const mb=document.getElementById('msBtn');if(mb){mb.hidden=!msAvailable();mb.innerHTML=MS.account?`<span class="avatar">${esc((MS.account.name||MS.account.username||'?').split(/\s+/).map(x=>x[0]).slice(0,2).join(''))}</span><span>${esc((MS.account.name||'').split(' ')[0]||'Account')}</span>`:'<svg width="14" height="14" viewBox="0 0 21 21" aria-hidden="true"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg><span>Sign in</span>';mb.onclick=()=>MS.account?openMsPanel():msSignIn()}
+  document.getElementById('printBtn').onclick=()=>{document.body.dataset.printed=new Date().toLocaleDateString(S.lang==='ar'?'ar-JO-u-nu-latn':'en-GB',{day:'numeric',month:'long',year:'numeric'});window.print()};document.getElementById('kbBtn').onclick=showShortcuts;const jc=document.getElementById('jobChip');if(jc)jc.onclick=()=>switchTab('check');renderJob();const mb=document.getElementById('msBtn');if(mb){mb.hidden=!msAvailable();mb.innerHTML=MS.account?`<span class="avatar">${esc((MS.account.name||MS.account.username||'?').split(/\s+/).map(x=>x[0]).slice(0,2).join(''))}</span><span>${esc((MS.account.name||'').split(' ')[0]||'Account')}</span>`:'<svg width="14" height="14" viewBox="0 0 21 21" aria-hidden="true"><rect x="1" y="1" width="9" height="9" fill="#f25022"/><rect x="11" y="1" width="9" height="9" fill="#7fba00"/><rect x="1" y="11" width="9" height="9" fill="#00a4ef"/><rect x="11" y="11" width="9" height="9" fill="#ffb900"/></svg><span>Sign in</span>';mb.onclick=()=>MS.account?openMsPanel():msSignIn()}
   const ci=document.getElementById('cohortName');ci.onchange=()=>{S.cohort=ci.value.trim()||'This cohort';saveLocal();renderTab()};const eb=document.getElementById('exportBtn');if(eb)eb.onclick=exportResults}
 
 /* ============================== IMPACT ============================== */
 function overall(){const TM=totalMax();const[kp,kq]=pairVals(r=>knowScore(r));const K=paired(kp,kq),C=paired(...pairVals(r=>likAvg(r,'conf'))),P=paired(...pairVals(r=>likAvg(r,'prac')));
   return{TM,kp,kq,K,C,P,hake:K.n?(K.post-K.pre)/(TM-K.pre):NaN,rel:K.n?(K.post-K.pre)/K.pre:NaN}}
 function renderImpact(){const el=document.getElementById('view-impact');const o=overall(),{K,C,P,TM}=o,cov=coverage(),hasK=K.n>=5;
-  const headline=hasK?`Participants' knowledge grew by <em>${Math.round(o.rel*100)}%</em>, and ${pct(K.up)} of them improved`:`Confidence rose from <em>${fmt(C.pre,2)}</em> to <em>${fmt(C.post,2)}</em> out of 5`;
+  const headline=hasK?`Average knowledge rose from <em>${fmt(K.pre)}</em> to <em>${fmt(K.post)}</em> out of ${TM}, and ${pct(K.up)} of participants improved`:`Confidence rose from <em>${fmt(C.pre,2)}</em> to <em>${fmt(C.post,2)}</em> out of 5`;
   const sub=hasK?`${esc(S.cohort)}: ${K.n} school leaders matched before and after. Average knowledge went from ${fmt(K.pre)} to ${fmt(K.post)} out of ${TM}, a ${effLabel(K.d)} effect (d = ${fmt(K.d,2)}, ${fmtP(K.p)}), closing ${pct(o.hake)} of the gap to full marks.`
     :`${esc(S.cohort)}: ${S.pairs.length} participants matched. Knowledge results appear once the written answers are marked (${pct(cov.frac)} done).`;
+  let TK={};if(hasK){const half=TM/2,hp=o.kp.filter(v=>v>=half).length/o.kp.length,hq=o.kq.filter(v=>v>=half).length/o.kq.length;const q4={tr:0,tl:0,n:0};for(const p of S.pairs){const a=knowScore(p.pre),b=knowScore(p.post),c=likAvg(p.pre,'conf'),d=likAvg(p.post,'conf');if(a==null||b==null||c==null||d==null)continue;q4.n++;if(b>a&&d>c)q4.tr++;if(b<=a&&d>c)q4.tl++}const tr=q4.n?q4.tr/q4.n:0,tl=q4.n?q4.tl/q4.n:0;
+    TK.hist=takeaway(`Before the programme ${pct(hp)} of participants scored at least half marks (${half}); after it, ${pct(hq)} did.`,`قبل البرنامج حصل ${pct(hp)} من المشاركين على نصف العلامة على الأقل (${half})، وبعده ${pct(hq)}.`);
+    TK.slope=takeaway(`${pct(K.up)} of participants improved, ${pct(K.same)} stayed the same and ${pct(K.down)} declined.`,`تحسّن ${pct(K.up)} من المشاركين، وبقي ${pct(K.same)} على حالهم، وتراجع ${pct(K.down)}.`,K.down>.1);
+    TK.quad=takeaway(`${pct(tr)} grew in both knowledge and confidence. ${pct(tl)} felt more confident without answering better${tl>=.15?', which is worth discussing with the trainers':''}.`,`${pct(tr)} تحسّنوا في المعرفة والثقة معًا. و${pct(tl)} شعروا بثقة أكبر دون أن تتحسن إجاباتهم${tl>=.15?'، وهذا يستحق النقاش مع المدربين':''}.`,tl>=.15)}
   const hs=(k,v,s)=>`<div class="hs"><div class="k">${k}</div><div class="v">${v}</div><div class="s">${s}</div></div>`;
   const hero=`<div class="hero"><div class="eyebrow">Programme impact · ${esc(S.cohort)}${S.focus?` · ${esc(DIMS[S.focus.dim].label)}: ${esc(S.focus.val)}`:''}</div><h2>${headline}</h2><p class="sub">${sub}</p><div class="hero-stats">
-    ${hs('Participants',`${S.pairs.length}`,S.meta.raw?`of ${S.meta.raw.pre} who started`:'matched pre and post')}
-    ${hs('Knowledge',hasK?`<span class="p">${fmt(K.pre)}</span><span class="a">→</span><span class="q">${fmt(K.post)}</span> <small>/${TM}</small>`:'<small>awaiting marking</small>',hasK?`${sgn(K.diff)} points · ${fmtP(K.p)}`:`${pct(cov.frac)} marked`)}
-    ${hs('Effect size',hasK?fmt(K.d,2):'–',hasK?effLabel(K.d)+' effect':'&nbsp;')}
-    ${hs('Confidence',`<span class="p">${fmt(C.pre,2)}</span><span class="a">→</span><span class="q">${fmt(C.post,2)}</span> <small>/5</small>`,`d = ${fmt(C.d,2)} · ${pct(C.up)} rated higher`)}
-    ${hs('Practice',`<span class="p">${fmt(P.pre,2)}</span><span class="a">→</span><span class="q">${fmt(P.post,2)}</span> <small>/4</small>`,`d = ${fmt(P.d,2)}`)}</div></div>`;
+    ${hs(`Participants${info('matched')}`,`${S.pairs.length}`,S.meta.raw?`of ${S.meta.raw.pre} who started`:'matched pre and post')}
+    ${hs(`Knowledge${info('knowledge')}`,hasK?`<span class="p">${fmt(K.pre)}</span><span class="a">→</span><span class="q">${fmt(K.post)}</span> <small>/${TM}</small>`:'<small>awaiting marking</small>',hasK?`${sgn(K.diff)} points · ${fmtP(K.p)}`:`${pct(cov.frac)} marked`)}
+    ${hs(`Effect size${info('effect')}`,hasK?fmt(K.d,2):'–',hasK?effLabel(K.d)+' effect':'&nbsp;')}
+    ${hs(`Confidence${info('conf')}`,`<span class="p">${fmt(C.pre,2)}</span><span class="a">→</span><span class="q">${fmt(C.post,2)}</span> <small>/5</small>`,`d = ${fmt(C.d,2)} · ${pct(C.up)} rated higher`)}
+    ${hs(`Practice${info('prac')}`,`<span class="p">${fmt(P.pre,2)}</span><span class="a">→</span><span class="q">${fmt(P.post,2)}</span> <small>/4</small>`,`d = ${fmt(P.d,2)}`)}</div></div>`;
   const mods=MODULES.map(Mo=>{const t=paired(...pairVals(r=>modScore(r,Mo.m))),mx=modMax(Mo.m),c=paired(...pairVals(r=>likAvg(r,'conf',Mo.m)));
-    return`<div class="mod">${ring(t.n?(t.post-t.pre)/(mx-t.pre):NaN)}<div><div class="t">Module ${Mo.m} · gap closed</div><div class="n">${esc(Mo.name)}</div>
+    return`<div class="mod">${ring(t.n?(t.post-t.pre)/(mx-t.pre):NaN)}<div><div class="t">Module ${Mo.m} · gap closed${info('gap')}</div><div class="n">${esc(Mo.name)}</div>
       <div class="vals num">${t.n?`Knowledge ${fmt(t.pre)} → <b>${fmt(t.post)}</b> /${mx} ${t.p<.05?'<span class="pill sig">significant</span>':'<span class="pill ns">n.s.</span>'}`:'Knowledge not marked yet'}<br>Confidence ${fmt(c.pre,2)} → <b>${fmt(c.post,2)}</b></div></div></div>`}).join('');
   const wait='<div class="note">Appears once the written answers are marked.</div>';
   el.innerHTML=`${welcomeHtml()}${hero}<div class="mods">${mods}</div>
-   <div class="grid g2 mt"><div class="panel"><div class="panel-head"><div><h2>The whole cohort moved</h2><p>Share of participants in each score band, before and after.</p></div>${legend}</div><div id="histBox">${hasK?'':wait}</div></div>
-     <div class="panel"><div class="panel-head"><div><h2>Every participant's journey</h2><p>One line per person, pre-test to post-test. The thick line is the average.</p></div><div class="legend"><span><i class="lg-post"></i>Improved</span><span><i class="lg-neg"></i>Declined</span></div></div><div id="slopeBox">${hasK?'':wait}</div></div></div>
-   <div class="grid g2 mt"><div class="panel"><div class="panel-head"><div><h2>Knowledge vs confidence</h2><p>Each dot is a participant. The shaded top-left corner is people whose confidence grew while their answers did not.</p></div></div><div id="quadBox">${hasK?'':wait}</div></div>
-     <div class="panel"><div class="panel-head"><div><h2>What the data says</h2><p>Calculated from the matched participants. Confirm with M&amp;E before quoting in a report.</p></div></div>
-       <ul class="insights">${insights().map(i=>`<li><span class="ic ${i.t}">${i.t==='pos'?'↑':i.t==='neg'?'↓':i.t==='warn'?'!':'i'}</span><span>${i.h}</span></li>`).join('')}</ul></div></div>
-   <div class="panel mt" id="aiPanel"></div>`;
+   <div class="grid g2 mt"><div class="panel"><div class="panel-head"><div><h2>The whole cohort moved</h2><p>Share of participants in each score band, before and after.</p></div>${legend}</div>${TK.hist||''}<div id="histBox">${hasK?'':wait}</div></div>
+     <div class="panel"><div class="panel-head"><div><h2>Every participant's journey</h2><p>One line per person, pre-test to post-test. The thick line is the average.</p></div><div class="legend"><span><i class="lg-post"></i>Improved</span><span><i class="lg-neg"></i>Declined</span></div></div>${TK.slope||''}<div id="slopeBox">${hasK?'':wait}</div></div></div>
+   <div class="grid g2 mt"><div class="panel" id="quadPanel"><div class="panel-head"><div><h2>Knowledge vs confidence${info('quadrant')}</h2><p>Each dot is a participant. The shaded top-left corner is people whose confidence grew while their answers did not.</p></div></div>${TK.quad||''}<div id="quadBox">${hasK?'':wait}</div></div>
+     <div class="panel"><div class="panel-head"><div><h2>Key messages</h2><p>Calculated from the matched participants. Confirm with M&amp;E before quoting in a report.</p></div></div>
+       <ul class="insights">${insights().map(i=>`<li><span class="ic ${i.t}">${i.t==='pos'?'↑':i.t==='neg'?'↓':i.t==='warn'?'!':'i'}</span><span>${i.h}${i.go?` <button class="showme" ${goAttr(i.go)}>Show me</button>`:''}</span></li>`).join('')}</ul></div></div>
+   ${questionsHtml()}<div class="panel mt" id="aiPanel"></div>`;
   if(hasK){const pr=[],pts=[];for(const p of S.pairs){const a=knowScore(p.pre),b=knowScore(p.post);if(a==null||b==null)continue;pr.push([a,b]);const c=likAvg(p.pre,'conf'),d=likAvg(p.post,'conf');if(c!=null&&d!=null)pts.push({k:b-a,c:d-c})}
     histChart('histBox',o.kp,o.kq,TM);slopeChart('slopeBox',pr,TM);quadChart('quadBox',pts)}
   wireWelcome(el);countUp(el.querySelector('.hero'));renderAIPanel()}
 function insights(){const out=[],o=overall(),{K,TM}=o,cov=coverage();
-  if(K.n>=5)out.push({t:K.diff>0?'pos':'neg',h:`Knowledge ${K.diff>=0?'rose':'fell'} from <b>${fmt(K.pre)}</b> to <b>${fmt(K.post)}</b> out of ${TM} (${sgn(K.diff)} points, ${fmtP(K.p)}), a <b>${effLabel(K.d)}</b> effect. ${pct(K.up)} of participants improved.`});
+  if(K.n>=5)out.push({t:K.diff>0?'pos':'neg',go:{tab:'impact',el:'#slopeBox'},h:`Knowledge ${K.diff>=0?'rose':'fell'} from <b>${fmt(K.pre)}</b> to <b>${fmt(K.post)}</b> out of ${TM} (${sgn(K.diff)} points, ${fmtP(K.p)}), a <b>${effLabel(K.d)}</b> effect. ${pct(K.up)} of participants improved.`});
   else out.push({t:'warn',h:`Knowledge results need marking: <b>${pct(cov.frac)}</b> of written answers are marked. Confidence and practice results are ready.`});
-  if(cov.ai&&S.settings.useAI){const a=agreement(),v=verdict(a);out.push({t:v.c==='sig'?'neu':'warn',h:`${cov.ai} answers use Copilot marks. Agreement with M&amp;E markers: <b>${v.t}</b>${a.n?` (QWK ${fmt(a.qwk,2)}, ${pct(a.w1)} within 1 point, ${a.n} answers compared)`:''}.`})}
+  if(cov.ai&&S.settings.useAI){const a=agreement(),v=verdict(a);out.push({t:v.c==='sig'?'neu':'warn',go:{tab:'workflow',el:'#agreePanel'},h:`${cov.ai} answers use Copilot marks. Agreement with M&amp;E markers: <b>${v.t}</b>${a.n?` (QWK ${fmt(a.qwk,2)}, ${pct(a.w1)} within 1 point, ${a.n} answers compared)`:''}.`})}
   const mods=MODULES.map(Mo=>{const t=paired(...pairVals(r=>modScore(r,Mo.m))),mx=modMax(Mo.m),c=paired(...pairVals(r=>likAvg(r,'conf',Mo.m)));return{Mo,t,ng:t.n?(t.post-t.pre)/(mx-t.pre):NaN,kg:t.n?t.diff/mx*100:NaN,cg:c.n?c.diff/4*100:NaN}}).filter(x=>x.t.n>=5);
-  if(mods.length>=2){const s=[...mods].sort((a,b)=>b.ng-a.ng),hi=s[0],lo=s[s.length-1];out.push({t:'pos',h:`Strongest module: <b>${esc(hi.Mo.name)}</b>, closing ${pct(hi.ng)} of the gap to full marks.`});
-    out.push({t:'neg',h:`Weakest module: <b>${esc(lo.Mo.name)}</b>, closing only ${pct(lo.ng)}. Worth reviewing with the trainers.`});
-    const g=mods.filter(x=>x.cg-x.kg>=10).sort((a,b)=>(b.cg-b.kg)-(a.cg-a.kg))[0];if(g)out.push({t:'warn',h:`In <b>${esc(g.Mo.name)}</b>, confidence grew by ${fmt(g.cg,0)} points of its scale but knowledge by only ${fmt(g.kg,0)}. Participants may feel more ready than their answers show.`})}
+  if(mods.length>=2){const s=[...mods].sort((a,b)=>b.ng-a.ng),hi=s[0],lo=s[s.length-1];out.push({t:'pos',go:{tab:'deep',el:'#qPanel'},h:`Strongest module: <b>${esc(hi.Mo.name)}</b>, closing ${pct(hi.ng)} of the gap to full marks.`});
+    out.push({t:'neg',go:{tab:'deep',el:'#qPanel'},h:`Weakest module: <b>${esc(lo.Mo.name)}</b>, closing only ${pct(lo.ng)}. Worth reviewing with the trainers.`});
+    const g=mods.filter(x=>x.cg-x.kg>=10).sort((a,b)=>(b.cg-b.kg)-(a.cg-a.kg))[0];if(g)out.push({t:'warn',go:{tab:'impact',el:'#quadPanel'},h:`In <b>${esc(g.Mo.name)}</b>, confidence grew by ${fmt(g.cg,0)} points of its scale but knowledge by only ${fmt(g.kg,0)}. Participants may feel more ready than their answers show.`})}
   const qs=includedQ().map(q=>{const t=paired(...pairVals(r=>score(r,q.n)));return{q,t,ng:t.n?(t.post-t.pre)/(q.max-t.pre):NaN}}).filter(x=>x.t.n>=5).sort((a,b)=>a.ng-b.ng);
-  if(qs.length>=4)out.push({t:'neu',h:`Lowest-gaining questions: ${qs.slice(0,2).map(x=>`<b>Q${x.q.n}</b> ${esc(x.q.title)} (${pct(x.ng)} of the gap)`).join(' and ')}.`});
+  if(qs.length>=4)out.push({t:'neu',go:{tab:'deep',el:'#qPanel'},h:`Lowest-gaining questions: ${qs.slice(0,2).map(x=>`<b>Q${x.q.n}</b> ${esc(x.q.title)} (${pct(x.ng)} of the gap)`).join(' and ')}.`});
   const dw=w=>{const rs=S.pairs.map(p=>p[w]).filter(r=>r.checklist.length);return rs.length?rs.filter(r=>r.checklist.some(x=>CHECK_WRONG.has(x))).length/rs.length:NaN};const d1=dw('pre'),d2=dw('post');
-  if(!isNaN(d1))out.push({t:d2<d1-.05?'pos':'neg',h:`Participants ticking at least one <i>incorrect</i> feature of effective PD: ${pct(d1)} before, ${pct(d2)} after.`});
-  segFindings().slice(0,3).forEach(f=>out.push({t:f.m>f.r?'pos':'neg',h:`<b>${esc(DIMS[f.dim].label)}: ${esc(f.g)}</b> (n = ${f.n}) gained ${sgn(f.m,f.dec)} on ${f.label.toLowerCase()} vs ${sgn(f.r,f.dec)} for everyone else (${fmtP(f.p)}).`}));
+  if(!isNaN(d1))out.push({t:d2<d1-.05?'pos':'neg',go:{tab:'deep',el:'#pdPanel'},h:`Participants ticking at least one <i>incorrect</i> feature of effective PD: ${pct(d1)} before, ${pct(d2)} after.`});
+  segFindings().slice(0,3).forEach(f=>out.push({t:f.m>f.r?'pos':'neg',go:{tab:'groups',set:{segDim:f.dim},el:'#grpPanel'},h:`<b>${esc(DIMS[f.dim].label)}: ${esc(f.g)}</b> (n = ${f.n}) gained ${sgn(f.m,f.dec)} on ${f.label.toLowerCase()} vs ${sgn(f.r,f.dec)} for everyone else (${fmtP(f.p)}).`}));
   return out}
 function segFindings(){const o=overall(),meas=o.K.n>=10?'know':'conf',get=MEASURES[meas].get,found=[];
   for(const dim of Object.keys(DIMS)){if(DIMS[dim].lookup&&!Object.keys(S.lookup).length)continue;const groups={};
@@ -791,14 +880,22 @@ function renderDeep(){const el=document.getElementById('view-deep');const qRows=
   const top=(w,which,mod,thr)=>{const rs=S.pairs.map(p=>p[w]);let n=0,t=0;rs.forEach(r=>r[which].forEach((v,i)=>{if(v==null||(mod&&LIKERT[i][0]!==mod))return;n++;if(v>=thr)t++}));return n?t/n:NaN};
   const rrow=(label,mod)=>{const P=paired(...pairVals(r=>likAvg(r,'prac',mod))),C=paired(...pairVals(r=>likAvg(r,'conf',mod)));
     return`<tr><td>${label}</td><td class="r num">${fmt(P.pre,2)} → <b>${fmt(P.post,2)}</b></td><td class="r num">${sgn(P.diff,2)}</td><td class="r num">${pct(top('pre','prac',mod,3))} → <b>${pct(top('post','prac',mod,3))}</b></td><td class="r num">${fmtP(P.p)}</td><td class="r num">${fmt(C.pre,2)} → <b>${fmt(C.post,2)}</b></td><td class="r num">${sgn(C.diff,2)}</td><td class="r num">${pct(top('pre','conf',mod,4))} → <b>${pct(top('post','conf',mod,4))}</b></td><td class="r num">${fmtP(C.p)}</td></tr>`};
-  const ratings=`<div class="panel"><div class="panel-head"><div><h2>Leadership practices: how often and how confident</h2><p>Self-ratings from the two rating questions, read straight from the survey (no marking needed). Practice: 1 = never, 4 = more than twice a semester. Confidence: 1 = not at all, 5 = very confident. “Often” = 3–4; “confident” = 4–5.</p></div></div>
+  const TKd={};{const mm=MODULES.map(Mo=>({Mo,c:paired(...pairVals(r=>likAvg(r,'conf',Mo.m))),p:paired(...pairVals(r=>likAvg(r,'prac',Mo.m)))})).filter(x=>x.c.n);if(mm.length){const bc=[...mm].sort((a,b)=>b.c.diff-a.c.diff)[0],bp=[...mm].sort((a,b)=>b.p.diff-a.p.diff)[0];
+      TKd.rat=takeaway(`Confidence rose most in ${bc.Mo.name} (${sgn(bc.c.diff,2)}), and use of the practices rose most in ${bp.Mo.name} (${sgn(bp.p.diff,2)}).`,`ارتفعت الثقة أكثر في ${TA(bc.Mo.name)} (${sgn(bc.c.diff,2)})، وارتفع تطبيق الممارسات أكثر في ${TA(bp.Mo.name)} (${sgn(bp.p.diff,2)}).`)}
+    const qq=qRows.filter(x=>x.t.n&&!isNaN(x.ng)).sort((a,b)=>b.ng-a.ng);if(qq.length>=2){const hi=qq[0],lo=qq[qq.length-1];TKd.q=takeaway(`Biggest improvement: Q${hi.q.n} ${hi.q.title} (closed ${pct(hi.ng)} of the gap). Smallest: Q${lo.q.n} ${lo.q.title} (${pct(lo.ng)}).`,`أكبر تحسّن: Q${hi.q.n} ${TA(hi.q.title)} (سُدّ ${pct(hi.ng)} من الفجوة). وأصغره: Q${lo.q.n} ${TA(lo.q.title)} (${pct(lo.ng)}).`,lo.ng<.15)}
+    const dw=w=>{const rs=S.pairs.map(p=>p[w]).filter(r=>r.checklist.length);return rs.length?rs.filter(r=>r.checklist.some(x=>CHECK_WRONG.has(x))).length/rs.length:NaN};const d1=dw('pre'),d2=dw('post');if(!isNaN(d1))TKd.pd=takeaway(`Participants ticking at least one incorrect feature went from ${pct(d1)} to ${pct(d2)}${d2<d1-.05?': fewer misconceptions after the programme.':': this misconception did not shrink much.'}`,`نسبة من اختاروا ميزة خاطئة واحدة على الأقل انتقلت من ${pct(d1)} إلى ${pct(d2)}${d2<d1-.05?': مفاهيم خاطئة أقل بعد البرنامج.':': لم يتراجع هذا المفهوم الخاطئ كثيرًا.'}`,!(d2<d1-.05));
+    const mt=meta.filter(x=>x.post!=null).sort((a,b)=>b.post-a.post)[0];if(mt){const nm=METAPHORS[meta.indexOf(mt)];TKd.mt=takeaway(`After the programme the most common choice was “${nm}” (${fmt(mt.post,0)}%, ${mt.post>=mt.pre?'up':'down'} from ${fmt(mt.pre,0)}%).`,`بعد البرنامج كان الاختيار الأكثر شيوعًا «${TA(nm)}» (${fmt(mt.post,0)}%، ${mt.post>=mt.pre?'ارتفاعًا':'انخفاضًا'} من ${fmt(mt.pre,0)}%).`)}
+    const lc=lk('conf').filter(x=>x.n),lp=lk('prac').filter(x=>x.n);const lab=i=>LIKERT[LIKERT.findIndex(x=>esc(x[1])===i.label)]?.[1]||i.label;
+    if(lc.length>1)TKd.lc=takeaway(`Confidence rose most for “${lab(lc[0])}” (${sgn(lc[0].g,2)}) and least for “${lab(lc[lc.length-1])}” (${sgn(lc[lc.length-1].g,2)}).`,`ارتفعت الثقة أكثر في «${TA(lab(lc[0]))}» (${sgn(lc[0].g,2)}) وأقل في «${TA(lab(lc[lc.length-1]))}» (${sgn(lc[lc.length-1].g,2)}).`);
+    if(lp.length>1)TKd.lp=takeaway(`Use rose most for “${lab(lp[0])}” (${sgn(lp[0].g,2)}) and least for “${lab(lp[lp.length-1])}” (${sgn(lp[lp.length-1].g,2)}).`,`ارتفع التطبيق أكثر في «${TA(lab(lp[0]))}» (${sgn(lp[0].g,2)}) وأقل في «${TA(lab(lp[lp.length-1]))}» (${sgn(lp[lp.length-1].g,2)}).`)}
+  const ratings=`<div class="panel"><div class="panel-head"><div><h2>Leadership practices: how often and how confident${info('conf')}</h2><p>Self-ratings from the two rating questions, read straight from the survey (no marking needed). Practice: 1 = never, 4 = more than twice a semester. Confidence: 1 = not at all, 5 = very confident. “Often” = 3–4; “confident” = 4–5.</p></div></div>${TKd.rat||''}
     <div class="tbl-wrap"><table><thead><tr><th></th><th class="r">Practice (1–4)</th><th class="r">Gain</th><th class="r">Use often</th><th class="r">p</th><th class="r">Confidence (1–5)</th><th class="r">Gain</th><th class="r">Confident</th><th class="r">p</th></tr></thead><tbody>
     ${MODULES.map(Mo=>rrow(`Module ${Mo.m} · ${esc(Mo.name)}`,Mo.m)).join('')}${rrow('<b>All 17 practices</b>',null)}</tbody></table></div></div>`;
-  el.innerHTML=`${ratings}<div class="panel mt"><div class="panel-head"><div><h2>Question by question</h2><p>Average score as a percentage of each question's maximum, sorted by how much of the possible improvement was achieved. Questions near the bottom point to content that may not be landing.</p></div>${legend}</div>${dumbbell(qList,0,100,{steps:4,dec:0,suffix:'%'})}</div>
-   <div class="grid g2 mt"><div class="panel"><div class="panel-head"><div><h2>Misconceptions about effective PD</h2><p>Share of participants ticking each feature in Q7. Incorrect features should fall after the programme; a red dot means one did not.</p></div>${legend}</div>${dumbbell(chk,0,100,{steps:4,dec:0,suffix:'%'})}</div>
-    <div class="panel"><div class="panel-head"><div><h2>How they describe the school (Q14)</h2><p>Share of participants choosing each metaphor for the school's structure.</p></div>${legend}</div>${dumbbell(meta,0,100,{steps:4,dec:0,suffix:'%'})}</div></div>
-   <div class="grid g2 mt"><div class="panel"><div class="panel-head"><div><h2>Confidence by practice</h2><p>1 = not at all confident, 5 = very confident</p></div>${legend}</div>${dumbbell(lk('conf'),1,5,{steps:4,dec:2})}</div>
-    <div class="panel"><div class="panel-head"><div><h2>How often they use each practice</h2><p>1 = never, 4 = more than twice a semester</p></div>${legend}</div>${dumbbell(lk('prac'),1,4,{steps:3,dec:2})}</div></div>`}
+  el.innerHTML=`${ratings}<div class="panel mt" id="qPanel"><div class="panel-head"><div><h2>Question by question${info('dumbbell')}</h2><p>Average score as a percentage of each question's maximum, sorted by how much of the possible improvement was achieved. Questions near the bottom point to content that may not be landing.</p></div>${legend}</div>${TKd.q||''}${dumbbell(qList,0,100,{steps:4,dec:0,suffix:'%'})}</div>
+   <div class="grid g2 mt"><div class="panel" id="pdPanel"><div class="panel-head"><div><h2>Misconceptions about effective PD</h2><p>Share of participants ticking each feature in Q7. Incorrect features should fall after the programme; a red dot means one did not.</p></div>${legend}</div>${TKd.pd||''}${dumbbell(chk,0,100,{steps:4,dec:0,suffix:'%'})}</div>
+    <div class="panel"><div class="panel-head"><div><h2>How they describe the school (Q14)</h2><p>Share of participants choosing each metaphor for the school's structure.</p></div>${legend}</div>${TKd.mt||''}${dumbbell(meta,0,100,{steps:4,dec:0,suffix:'%'})}</div></div>
+   <div class="grid g2 mt"><div class="panel"><div class="panel-head"><div><h2>Confidence by practice</h2><p>1 = not at all confident, 5 = very confident</p></div>${legend}</div>${TKd.lc||''}${dumbbell(lk('conf'),1,5,{steps:4,dec:2})}</div>
+    <div class="panel"><div class="panel-head"><div><h2>How often they use each practice</h2><p>1 = never, 4 = more than twice a semester</p></div>${legend}</div>${TKd.lp||''}${dumbbell(lk('prac'),1,4,{steps:3,dec:2})}</div></div>`}
 
 /* ============================== GROUPS & MAP ============================== */
 function renderGroups(){const el=document.getElementById('view-groups'),hasL=Object.keys(S.lookup).length>0;if(DIMS[S.segDim].lookup&&!hasL)S.segDim='years';if(DIMS[S.segDim2].lookup&&!hasL)S.segDim2='sex';
@@ -808,29 +905,33 @@ function renderGroups(){const el=document.getElementById('view-groups'),hasL=Obj
   for(const p of S.pairs){const g=dimVal(p,S.segDim)??'Not stated',a=Me.get(p.pre),b=Me.get(p.post);if(a==null||b==null)continue;(groups[g]=groups[g]||{a:[],b:[]});groups[g].a.push(a);groups[g].b.push(b)}
   const order=DIMS[S.segDim].map?Object.values(DIMS[S.segDim].map):null;const keys=Object.keys(groups).sort((x,y)=>order?((order.indexOf(x)+1||99)-(order.indexOf(y)+1||99)):groups[y].a.length-groups[x].a.length);const all=paired(...pairVals(Me.get));
   const rows=keys.map(g=>{const t=paired(groups[g].a,groups[g].b),sm=t.n<S.settings.minN;return{label:esc(g),sub:`n = ${t.n}`,pre:sm?null:t.pre,post:sm?null:t.post,empty:sm?`Hidden: fewer than ${S.settings.minN}`:'',n:t.n,p:t.p,pill:t.p<.05?'<span class="pill sig">significant</span>':'<span class="pill ns">n.s.</span>'}});
+  let TKg='';{const vis=keys.map(g=>({g,t:paired(groups[g].a,groups[g].b)})).filter(x=>x.t.n>=S.settings.minN);if(vis.length>=2){const so=[...vis].sort((a,b)=>b.t.diff-a.t.diff),hi=so[0],lo=so[so.length-1],sg=vis.filter(x=>x.t.p<.05&&x.t.diff>0).length,dl=DIMS[S.segDim].label;
+     TKg=takeaway(`By ${dl.toLowerCase()}, ${hi.g} gained most (${sgn(hi.t.diff,dec)}) and ${lo.g} least (${sgn(lo.t.diff,dec)}). ${sg} of ${vis.length} groups improved significantly.`,`حسب ${TA(dl)}، حقّق ${TA(hi.g)} أكبر مكسب (${sgn(hi.t.diff,dec)}) و${TA(lo.g)} أقل مكسب (${sgn(lo.t.diff,dec)}). تحسّنت ${sg} من ${vis.length} فئات بشكل دالّ إحصائيًا.`)}else if(vis.length===1)TKg=takeaway(`Only one group is large enough to show. Lower the privacy minimum or pick another grouping.`,`فئة واحدة فقط كبيرة بما يكفي للعرض. خفّض الحد الأدنى للخصوصية أو اختر تجميعًا آخر.`,true)}
+  let TKx='';
   const table=`<div class="tbl-wrap"><table><thead><tr><th>${esc(DIMS[S.segDim].label)}</th><th class="r">n</th><th class="r">Pre</th><th class="r">Post</th><th class="r">Gain</th><th class="r">Effect (d)</th><th class="r">Improved</th><th class="r">p</th></tr></thead><tbody>
     ${keys.map(g=>{const t=paired(groups[g].a,groups[g].b),sm=t.n<S.settings.minN;return`<tr class="${sm?'db-row-muted':''}"><td>${esc(g)}</td><td class="r num">${t.n}</td><td class="r num">${sm?'–':fmt(t.pre,dec)}</td><td class="r num">${sm?'–':fmt(t.post,dec)}</td><td class="r num">${sm?'–':sgn(t.diff,dec)}</td><td class="r num">${sm?'–':fmt(t.d,2)}</td><td class="r num">${sm?'–':pct(t.up)}</td><td class="r num">${sm?'hidden':fmtP(t.p)}</td></tr>`}).join('')}
     <tr><td><b>All matched</b></td><td class="r num"><b>${all.n||0}</b></td><td class="r num">${fmt(all.pre,dec)}</td><td class="r num">${fmt(all.post,dec)}</td><td class="r num">${sgn(all.diff,dec)}</td><td class="r num">${fmt(all.d,2)}</td><td class="r num">${pct(all.up)}</td><td class="r num">${fmtP(all.p)}</td></tr></tbody></table></div>`;
   const cells={},cols=new Set(),rws=new Set();for(const p of S.pairs){const g1=dimVal(p,S.segDim)??'Not stated',g2=dimVal(p,S.segDim2)??'Not stated',a=Me.get(p.pre),b=Me.get(p.post);if(a==null||b==null)continue;rws.add(g1);cols.add(g2);(cells[g1+'||'+g2]=cells[g1+'||'+g2]||[]).push(b-a)}
   const o2=DIMS[S.segDim2].map?Object.values(DIMS[S.segDim2].map):null;const colList=[...cols].sort((x,y)=>o2?((o2.indexOf(x)+1||99)-(o2.indexOf(y)+1||99)):x.localeCompare(y)),rowList=keys.filter(k=>rws.has(k));
-  const mx=Math.max(...Object.values(cells).filter(a=>a.length>=S.settings.minN).map(a=>Math.abs(mean(a))),1e-9);const col=v=>{const t=Math.min(1,Math.abs(v)/mx);return`rgba(${v>=0?'42,120,214':'208,59,59'},${(0.14+0.7*t).toFixed(2)})`};
+  const mx=Math.max(...Object.values(cells).filter(a=>a.length>=S.settings.minN).map(a=>Math.abs(mean(a))),1e-9);{const big=Object.entries(cells).filter(([k,a])=>a.length>=S.settings.minN).map(([k,a])=>({k,m:mean(a),n:a.length})).sort((a,b)=>b.m-a.m)[0];if(big&&S.segDim!==S.segDim2){const[r,c]=big.k.split('||');TKx=takeaway(`The biggest gain is where ${r} meets ${c} (${sgn(big.m,dec)}, n = ${big.n}).`,`أكبر مكسب حيث تلتقي فئة ${TA(r)} مع ${TA(c)} (${sgn(big.m,dec)}، العدد ${big.n}).`)}}const col=v=>{const t=Math.min(1,Math.abs(v)/mx);return`rgba(${v>=0?'18,96,108':'208,59,59'},${(0.14+0.7*t).toFixed(2)})`};
   const cross=S.segDim===S.segDim2?'<div class="note">Pick two different groupings to combine them.</div>':`<div class="tbl-wrap"><table class="heat"><thead><tr><th></th>${colList.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead><tbody>
     ${rowList.map(r=>`<tr><td class="rowh">${esc(r)}</td>${colList.map(c=>{const a=cells[r+'||'+c]||[];if(!a.length)return'<td class="muted">·</td>';if(a.length<S.settings.minN)return`<td class="muted" data-tip="Fewer than ${S.settings.minN} people: hidden to protect anonymity"><span class="n">n = ${a.length}</span></td>`;const v=mean(a);return`<td style="background:${col(v)};${Math.abs(v)/mx>.55?'color:#fff':''}" data-tip="${esc(r)} × ${esc(c)}<br>Mean gain ${sgn(v,dec)}<br>n = ${a.length}"><span class="cell">${sgn(v,dec)}</span><span class="n">n = ${a.length}</span></td>`}).join('')}</tr>`).join('')}</tbody></table></div>`;
-  el.innerHTML=`<div class="grid g2"><div class="panel"><div class="panel-head"><div><h2>Gain by governorate</h2><p>Schematic map of Jordan's governorates, not to scale. Governorates with fewer than ${S.settings.minN} participants are hidden.</p></div><label class="field">Measure<select id="mapMeasure">${measOpts(S.mapMeasure)}</select></label></div><div id="mapBox"></div></div>
-    <div class="panel"><div class="panel-head"><div><h2>Explore groups</h2><p>“Significant” means a paired t-test gives p &lt; .05 within that group.</p></div></div>
+  el.innerHTML=`<div class="grid g2"><div class="panel" id="mapPanel"><div class="panel-head"><div><h2>Gain by governorate</h2><p>Schematic map of Jordan's governorates, not to scale. Governorates with fewer than ${S.settings.minN} participants are hidden.</p></div><label class="field">Measure<select id="mapMeasure">${measOpts(S.mapMeasure)}</select></label></div><div id="mapBox"></div></div>
+    <div class="panel" id="grpPanel"><div class="panel-head"><div><h2>Explore groups${info('p')}</h2><p>“Significant” means a paired t-test gives p &lt; .05 within that group.</p></div></div>
       <div class="controls"><label class="field">Measure<select id="segMeasure">${measOpts(S.segMeasure)}</select></label><label class="field">Group by<select id="segDim">${dimOpts(S.segDim)}</select></label><label class="field">Smallest group shown<input type="number" id="minN" min="3" max="50" value="${S.settings.minN}"></label></div>
-      ${rows.length?dumbbell(rows,lo,hi,{dec}):'<div class="note">No complete results for this measure yet. Mark more answers, or choose confidence or practice.</div>'}</div></div>
+      ${TKg}${rows.length?dumbbell(rows,lo,hi,{dec}):'<div class="note">No complete results for this measure yet. Mark more answers, or choose confidence or practice.</div>'}</div></div>
    <div class="panel mt"><div class="panel-head"><div><h2>${esc(Me.label)} by ${esc(DIMS[S.segDim].label.toLowerCase())}</h2></div></div>${table}</div>
-   <div class="panel mt"><div class="panel-head"><div><h2>Two characteristics combined</h2><p>Mean gain where two groupings overlap. Blue = gain, red = drop, darker = larger.</p></div><label class="field">Compare with<select id="segDim2">${dimOpts(S.segDim2)}</select></label></div>${cross}</div>`;
+   <div class="panel mt"><div class="panel-head"><div><h2>Two characteristics combined</h2><p>Mean gain where two groupings overlap. Blue = gain, red = drop, darker = larger.</p></div><label class="field">Compare with<select id="segDim2">${dimOpts(S.segDim2)}</select></label></div>${TKx}${cross}</div>`;
   renderMap();el.querySelector('#segMeasure').onchange=e=>{S.segMeasure=e.target.value;renderTab()};el.querySelector('#segDim').onchange=e=>{S.segDim=e.target.value;renderTab()};el.querySelector('#segDim2').onchange=e=>{S.segDim2=e.target.value;renderTab()};
   el.querySelector('#minN').onchange=e=>{S.settings.minN=Math.max(3,+e.target.value||10);renderAll()};el.querySelector('#mapMeasure').onchange=e=>{S.mapMeasure=e.target.value;renderTab()}}
 function renderMap(){const box=document.getElementById('mapBox');if(!box)return;if(!Object.keys(S.lookup).length){box.innerHTML='<div class="note">Governorate isn\'t in the survey. Use “Add governorate list”: a sheet with the ministry ID and governorate (and optionally directorate).</div>';return}
   const Me=MEASURES[S.mapMeasure],dec=Me.dec,g={},unm=new Set();for(const p of S.pairs){const raw=dimVal(p,'governorate');if(!raw)continue;const k=govKey(raw);if(!k){unm.add(raw);continue}const a=Me.get(p.pre),b=Me.get(p.post);if(a==null||b==null)continue;(g[k]=g[k]||[]).push(b-a)}
-  const mx=Math.max(...Object.values(g).filter(a=>a.length>=S.settings.minN).map(a=>Math.abs(mean(a))),1e-9);const col=v=>`rgba(${v>=0?'42,120,214':'208,59,59'},${(0.16+0.74*Math.min(1,Math.abs(v)/mx)).toFixed(2)})`;
+  const mx=Math.max(...Object.values(g).filter(a=>a.length>=S.settings.minN).map(a=>Math.abs(mean(a))),1e-9);const col=v=>`rgba(${v>=0?'18,96,108':'208,59,59'},${(0.16+0.74*Math.min(1,Math.abs(v)/mx)).toFixed(2)})`;
   const cells=[];for(let r=0;r<7;r++)for(let c=0;c<3;c++){const G=GOV.find(x=>x.r===r&&x.c===c);if(!G){cells.push('<div></div>');continue}const a=g[G.k]||[];
     if(a.length<S.settings.minN){cells.push(`<div class="tile-g none" data-tip="${esc(G.k)}: ${a.length?`only ${a.length}, hidden`:'no participants'}"><span class="gn">${esc(G.k)}</span><span class="gs">${G.ar} · n = ${a.length}</span></div>`);continue}
     const v=mean(a);cells.push(`<div class="tile-g" style="background:${col(v)};${Math.abs(v)/mx>.5?'color:#fff':''}" data-tip="${esc(G.k)} (${G.ar})<br>Mean gain ${sgn(v,dec)}<br>n = ${a.length}"><span class="gn">${esc(G.k)}</span><span class="gv">${sgn(v,dec)}</span><span class="gs">${G.ar} · n = ${a.length}</span></div>`)}
-  box.innerHTML=`<div class="tmap">${cells.join('')}</div><div class="legend mt" style="justify-content:center"><span>Smaller gain</span><span class="gradient" style="background:linear-gradient(90deg,rgba(42,120,214,.16),rgba(42,120,214,.9))"></span><span>Larger gain</span><span class="muted">· hatched = too few people</span></div>
+  let TKm='';{const vis=Object.entries(g).filter(([k,a])=>a.length>=S.settings.minN).map(([k,a])=>({k,m:mean(a)})).sort((a,b)=>b.m-a.m),hid=GOV.length-vis.length;const ar=k=>(GOV.find(x=>x.k===k)||{}).ar||k;if(vis.length>=2)TKm=takeaway(`Largest gain: ${vis[0].k} (${sgn(vis[0].m,dec)}). Smallest: ${vis[vis.length-1].k} (${sgn(vis[vis.length-1].m,dec)}). ${hid} governorates are hidden or have too few people.`,`أكبر مكسب: ${ar(vis[0].k)} (${sgn(vis[0].m,dec)}). وأصغره: ${ar(vis[vis.length-1].k)} (${sgn(vis[vis.length-1].m,dec)}). ${hid} محافظات مخفية أو فيها عدد قليل جدًا.`)}
+  box.innerHTML=`${TKm}<div class="tmap">${cells.join('')}</div><div class="legend mt" style="justify-content:center"><span>Smaller gain</span><span class="gradient" style="background:linear-gradient(90deg,rgba(18,96,108,.16),rgba(18,96,108,.9))"></span><span>Larger gain</span><span class="muted">· hatched = too few people</span></div>
     ${unm.size?`<p class="small muted mt">Not matched to a governorate: ${[...unm].slice(0,6).map(esc).join(', ')}</p>`:''}`}
 
 /* ============================== ACROSS COHORTS ============================== */
@@ -851,11 +952,12 @@ function renderCohorts(){const el=document.getElementById('view-cohorts'),list=h
   const cRows=list.map(h=>({label:esc(h.name),pre:h.conf.pre,post:h.conf.post}));const maxK=Math.max(49,...list.map(h=>h.max||49));
   const modTbl=`<div class="tbl-wrap"><table><thead><tr><th>Cohort</th>${MODULES.map(Mo=>`<th class="r">M${Mo.m}</th>`).join('')}<th class="r">Copilot QWK</th></tr></thead><tbody>
     ${list.map(h=>`<tr><td>${esc(h.name)}</td>${MODULES.map(Mo=>{const x=(h.modules||[]).find(z=>z.m===Mo.m)||{};return`<td class="r num">${x.pre==null?'–':x.pre+'% → <b>'+x.post+'%</b>'}</td>`}).join('')}<td class="r num">${h.agreement&&h.agreement.qwk!=null?fmt(h.agreement.qwk,2):'–'}</td></tr>`).join('')}</tbody></table></div>`;
+  let TKc='';{const cur=list.find(h=>h.current),prev=list.filter(h=>!h.current&&h.know&&h.know.pre!=null);if(cur&&cur.know.pre!=null&&prev.length){const g=cur.know.post-cur.know.pre,pg=mean(prev.map(h=>h.know.post-h.know.pre));TKc=takeaway(`This cohort gained ${sgn(g)} points; ${prev.length===1?'the earlier cohort':'earlier cohorts'} gained ${sgn(pg)} on average.`,`حقق هذا الفوج ${sgn(g)} نقطة، مقابل ${sgn(pg)} في المتوسط ${prev.length===1?'للفوج السابق':'للأفواج السابقة'}.`,g<pg-1)}}
   el.innerHTML=`<div class="panel"><div class="panel-head"><div><h2>Knowledge across cohorts</h2><p>Average knowledge before and after, cohort by cohort. Only summary numbers are stored: no answers, names or IDs.</p></div>
      <div class="actions">${legend}${S.source==='file'?`<button class="btn primary" id="saveCohort" ${db||MS.account?'':'disabled'}>Save this cohort to history</button>`:''}</div></div>
      ${S.source==='demo'?'<div class="note" style="margin-bottom:12px">Showing fictional cohorts for the demo. Real cohorts appear here once they are saved.</div>':''}
      ${!db&&!MS.account&&S.source==='file'?`<div class="note" style="margin-bottom:12px">${msAvailable()?'Sign in to Microsoft to keep a cohort history in your OneDrive.':'Cohort history works when this page is opened in Claude.'}</div>`:''}
-     ${list.length?dumbbell(kRows,0,maxK,{steps:5,dec:1}):'<div class="note">No cohorts saved yet.</div>'}</div>
+     ${TKc}${list.length?dumbbell(kRows,0,maxK,{steps:5,dec:1}):'<div class="note">No cohorts saved yet.</div>'}</div>
    <div class="grid g2 mt"><div class="panel"><div class="panel-head"><div><h2>Confidence across cohorts</h2><p>Self-rated, 1–5</p></div>${legend}</div>${list.length?dumbbell(cRows,1,5,{steps:4,dec:2}):''}</div>
      <div class="panel"><div class="panel-head"><div><h2>Modules across cohorts</h2><p>Average knowledge as % of each module's maximum, pre → post</p></div></div>${modTbl}
      ${S.source==='file'&&S.history.length?`<details class="mt"><summary>Manage saved cohorts</summary><div class="stack mt">${S.history.map(h=>`<div class="actions"><span>${esc(h.name)} <span class="muted small">${esc(h.savedAt)}</span></span><button class="btn ghost" data-del="${esc(h.id)}">Remove</button></div>`).join('')}</div></details>`:''}</div></div>`;
@@ -958,13 +1060,13 @@ function importLookup(wb,name){const rows=sheetObjs(wb);if(!rows.length){toast('
 function renderWorkflow(){const el=document.getElementById('view-workflow'),cs=calStats(),cov=coverage(),rv=reviewCount(),a=agreement(),v=verdict(a),ai=anyAI(),m=S.meta;
   const steps=[{h:'Open this cohort\'s survey workbook',p:'The SurveyMonkey export with pre and post answers. The data check then confirms every column and answer was read.',done:S.source==='file'&&(()=>{try{return preflight().ok}catch(e){return false}})(),act:'<button class="btn" id="wfCheck">Open data check</button>'},
    {h:'Load the examples bank from earlier cohorts',p:'From the second cohort on. Adds M&E-marked examples to every Copilot prompt, so accuracy improves each cohort.',done:S.bank.length>0,opt:true,act:`<span class="btn file-btn">Load examples bank<input type="file" class="anyImport" accept=".xlsx,.csv"></span>`},
-   {h:`Hand-mark the calibration set (${cs.done} of ${cs.tot})`,p:`${S.settings.calPerQ} answers per question, chosen at random. Half become worked examples for Copilot; the other half measure how closely Copilot agrees with M&E.`,done:cs.tot>0&&cs.left===0,act:'<button class="btn" data-go="cal">Start marking</button>'},
+   {h:`Hand-mark the calibration set (${cs.done} of ${cs.tot})${info('cal')}`,p:`${S.settings.calPerQ} answers per question, chosen at random. Half become worked examples for Copilot; the other half measure how closely Copilot agrees with M&E.`,done:cs.tot>0&&cs.left===0,act:'<button class="btn" data-go="cal">Start marking</button>'},
    ...(msAvailable()?[{h:'Mark with Copilot',p:'One click: the cleaned answers go to your OneDrive Inbox, your “AILPD – Mark answers” flow marks them, and the marks come back here by themselves. Only codes, questions, rubric, examples and answers are sent: no names, IDs or pre/post.',done:ai,act:`<button class="btn primary" id="wfMark">${MS.account?'Mark with Copilot':'Sign in and mark'}</button><button class="btn" id="wfKey">Save code key</button>`}]:[
       {h:'Export answers for Copilot',p:'Only codes, questions, rubric, examples and answers go out: no names, IDs or pre/post. Save the code key too and keep it inside QRTA.',done:S.flags.exported,act:'<button class="btn primary" id="wfExport">Export for Copilot</button><button class="btn" id="wfKey">Save code key</button>'},
       {h:'Run the Copilot marking workflow',p:'Upload the file to OneDrive as AILPD Marking / Current cohort.xlsx (replace last cohort\'s), then run the “AILPD – Mark answers” flow until no rows say New.',done:ai},
       {h:'Import Copilot\'s marks',p:'Download the finished file from OneDrive and import it here. Uncertain answers are flagged automatically.',done:ai,act:'<span class="btn file-btn">Import Copilot marks<input type="file" class="anyImport" accept=".xlsx,.csv"></span>'},
    ]),
-   {h:`Review flagged answers (${rv} left)`,p:'Answers where Copilot was unsure, or where its two runs disagreed.',done:ai&&rv===0,act:'<button class="btn" data-go="review">Review</button>'},
+   {h:`Review flagged answers (${rv} left)${info('review')}`,p:'Answers where Copilot was unsure, or where its two runs disagreed.',done:ai&&rv===0,act:'<button class="btn" data-go="review">Review</button>'},
    {h:`Check agreement: ${v.t}`,p:v.d,done:v.c==='sig'},
    {h:'Save the cohort and share the results',p:'Saves the summary numbers to the cohort history. Then export the results, and the examples bank for next cohort.',done:S.flags.saved,act:`<button class="btn" id="wfSave" ${(db||MS.account)&&S.source==='file'?'':'disabled'}>Save cohort</button><button class="btn" id="wfResults">Export results</button><button class="btn" id="wfBank">Export examples bank</button>`}];
   const now=steps.findIndex(s=>!s.done&&!s.opt);
@@ -975,7 +1077,7 @@ function renderWorkflow(){const el=document.getElementById('view-workflow'),cs=c
     cm=`<h3 class="mt">Where Q${cmRow.q.n} disagrees</h3><p class="small muted" style="margin:4px 0 8px">Rows = M&amp;E mark, columns = Copilot mark. Anything off the shaded diagonal is a disagreement. Click a question above to switch.</p><div class="tbl-wrap"><table class="cm"><thead><tr><th>M&amp;E \\ Copilot</th>${O.map((_,j)=>`<th>${j}</th>`).join('')}</tr></thead><tbody>${O.map((row,i)=>`<tr><th>${i}</th>${row.map((c,j)=>`<td class="${i===j?'d':''}">${c||''}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
   el.innerHTML=`<div data-job></div><div class="grid g2"><div class="panel"><div class="panel-head"><div><h2>Cohort workflow</h2><p>The same steps for every cohort. Progress is worked out from what has been done in this browser.</p></div></div>
      <ol class="steps">${steps.map((s,i)=>`<li class="step ${s.done?'done':i===now?'now':''}"><span class="no">${s.done?'✓':i+1}</span><div><h3>${s.h}${s.opt?' <span class="pill ns">optional</span>':''}</h3><p>${s.p}</p></div><div class="act">${s.act||''}</div></li>`).join('')}</ol></div>
-    <div class="stack"><div class="panel"><div class="panel-head"><div><h2>Copilot vs M&amp;E agreement</h2><p>QWK (quadratic weighted kappa) is the standard measure for automated marking. Aim for QWK ≥ 0.70 and at least 90% within one point.</p></div><span class="pill ${v.c}" style="font-size:12px">${v.t}</span></div>${cal}${cm}</div>
+    <div class="stack"><div class="panel" id="agreePanel"><div class="panel-head"><div><h2>Copilot vs M&amp;E agreement${info('qwk')}</h2><p>QWK (quadratic weighted kappa) is the standard measure for automated marking. Aim for QWK ≥ 0.70 and at least 90% within one point.</p></div><span class="pill ${v.c}" style="font-size:12px">${v.t}</span></div>${cal}${cm}</div>
      <div class="panel"><div class="panel-head"><div><h2>Settings</h2></div></div><div class="stack">
        <label class="check"><input type="checkbox" id="setAI" ${S.settings.useAI?'checked':''}> Count Copilot marks in results until a person marks the answer</label>
        <label class="check"><input type="checkbox" id="setGender" ${S.settings.includeGender?'checked':''}> Include Q13 (gender equity) in totals, provisional max 3</label>
@@ -1078,7 +1180,7 @@ function renderCheck(){const el=document.getElementById('view-check');if(S.sourc
   el.innerHTML=`<div data-job></div><div class="panel"><div class="panel-head"><div><div class="eyebrow">Data check · ${esc(S.fileName)}</div><h2>${verdict.t}</h2><p>${verdict.d}</p></div><span class="pill ${verdict.c}" style="font-size:12px">${P.fail?'Blocked':'Ready'}</span></div>
      <div class="hero-mini"><div><b class="num">${S.pairs.length}</b><span>matched participants</span></div><div><b class="num">${totalAns}</b><span>written answers found</span></div><div><b class="num">${toCop}</b><span>will go to Copilot</span></div><div><b class="num">${P.fields.filter(f=>f.st==='ok').length}/${P.fields.length}</b><span>checks passed</span></div></div>
      <div class="actions mt">${msAvailable()?`<button class="btn primary" id="ckMark" ${P.fail||!toCop?'disabled':''}>${MS.account?'Mark with Copilot':'Sign in and mark with Copilot'}</button><button class="btn" id="ckExport" ${P.fail||!toCop?'disabled':''}>Export file instead</button>`:`<button class="btn primary" id="ckExport" ${P.fail||!toCop?'disabled':''}>Export for Copilot</button>`}<button class="btn" id="ckKey">Save code key</button></div></div>
-   <div class="panel mt"><div class="panel-head"><div><h2>Every answer accounted for</h2><p>Each written answer from a matched participant must land in exactly one place. A ✓ means the numbers add up, so nothing is left out.</p></div></div>
+   <div class="panel mt"><div class="panel-head"><div><h2>Every answer accounted for${info('blank')}</h2><p>Each written answer from a matched participant must land in exactly one place. A ✓ means the numbers add up, so nothing is left out.</p></div></div>
      <div class="tbl-wrap"><table><thead><tr><th>Question</th><th class="r">Answers</th><th class="r">Blank (auto 0)</th><th class="r">Examples</th><th class="r">Marked by M&amp;E</th><th class="r">Copilot done</th><th class="r">To Copilot</th><th></th></tr></thead><tbody>${recon}
      <tr><td><b>All questions</b></td><td class="r num"><b>${tot('total')}</b></td><td class="r num">${tot('blank')}</td><td class="r num">${tot('example')}</td><td class="r num">${tot('hand')}</td><td class="r num">${tot('copilotDone')}</td><td class="r num"><b>${toCop}</b></td><td>${P.leftOut?'<span class="pill bad">missing</span>':'<span class="pill sig">✓</span>'}</td></tr></tbody></table></div>
      <p class="small muted mt"><span>Q7 is marked automatically from the ticks (${P.q7} of ${P.q7n} tests have ticks).</span> ${m.preOnly&&m.postOnly&&(m.preOnly.length+m.postOnly.length)?`<span>${m.preOnly.length+m.postOnly.length} people took only one test, so their answers can't show a change and are not marked.</span>`:''}</p></div>
@@ -1196,7 +1298,7 @@ const FOCUS_TABS=['impact','deep','groups'];
 function focusOptions(dim){const c={};S.pairs.forEach(p=>{const v=dimVal(p,dim);if(v!=null)c[v]=(c[v]||0)+1});const order=DIMS[dim].map?Object.values(DIMS[dim].map):null;return Object.entries(c).sort((a,b)=>order?((order.indexOf(a[0])+1||99)-(order.indexOf(b[0])+1||99)):b[1]-a[1])}
 function renderFocusBar(){const el=document.getElementById('focusBar');if(!el)return;if(!FOCUS_TABS.includes(S.tab)||!S.pairs.length){el.hidden=true;return}el.hidden=false;const hasL=Object.keys(S.lookup).length>0;
   const f=S.focus,dim=S.focusDim||'job',opts=focusOptions(dim);
-  el.innerHTML=`<div class="focus ${f?'on':''}"><span class="focus-l"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg><span>Focus on a group</span></span>
+  el.innerHTML=`<div class="focus ${f?'on':''}"><span class="focus-l"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg><span>Focus on a group</span>${info('minN')}</span>
     <select id="fDim" aria-label="Group type">${Object.entries(DIMS).filter(([k,d])=>!d.lookup||hasL).map(([k,d])=>`<option value="${k}" ${k===dim?'selected':''}>${esc(d.label)}</option>`).join('')}</select>
     <select id="fVal" aria-label="Group"><option value="">All participants</option>${opts.map(([v,n])=>`<option value="${esc(v)}" ${f&&f.dim===dim&&f.val===v?'selected':''} ${n<S.settings.minN?'disabled':''}>${esc(v)} (${n})</option>`).join('')}</select>
     ${f?`<span class="chip info"><span>Showing</span> <span>${esc(DIMS[f.dim].label)}</span>: <span>${esc(f.val)}</span> · <span>n = ${f.n}</span></span><button class="btn ghost" id="fClear">Show everyone</button>`:'<span class="small muted">Groups smaller than the privacy minimum are greyed out.</span>'}</div>`;
@@ -1240,10 +1342,10 @@ function instantSummary(lang){const ar=lang==='ar',T=t=>ar&&window.trAR?window.t
       if(looksSurvey){try{loadWorkbook(wb,name);toast(`Loaded ${S.pairs.length} matched participants`)}catch(err){toast(err.message)}}else importAny(wb,name)})})})();
 /* ---------- keyboard shortcuts ---------- */
 function shortcutsHtml(){const k=(a,b)=>`<tr><td><kbd>${a}</kbd></td><td>${b}</td></tr>`;return`<div class="modal-card" role="dialog" aria-modal="true" aria-label="Keyboard shortcuts"><div class="panel-head"><h2>Keyboard shortcuts</h2><button class="btn ghost" id="kbClose">Close</button></div><table><tbody>
-  ${k('1 – 7','<span>Switch tab (with Alt)</span>')}${k('?','<span>Show this list</span>')}${k('0 – 5','<span>Give a score while marking</span>')}${k('← →','<span>Previous or next answer while marking</span>')}${k('Ctrl P','<span>Print or save the current tab as PDF</span>')}</tbody></table></div>`}
+  ${k('1 – 9','<span>Switch section (with Alt)</span>')}${k('?','<span>Show this list</span>')}${k('0 – 5','<span>Give a score while marking</span>')}${k('← →','<span>Previous or next answer while marking</span>')}${k('Ctrl P','<span>Print or save the current tab as PDF</span>')}</tbody></table></div>`}
 function showShortcuts(){let m=document.getElementById('kbModal');if(!m){m=document.createElement('div');m.id='kbModal';m.className='modal';document.body.appendChild(m);m.onclick=e=>{if(e.target===m)m.hidden=true}}m.innerHTML=shortcutsHtml();m.hidden=false;m.querySelector('#kbClose').onclick=()=>m.hidden=true;m.querySelector('#kbClose').focus()}
 addEventListener('keydown',e=>{if(e.target.matches&&e.target.matches('input,textarea,select'))return;if(e.key==='?'){e.preventDefault();showShortcuts();return}if(e.key==='Escape'){const m=document.getElementById('kbModal');if(m)m.hidden=true}
-  if(e.altKey&&/^[1-7]$/.test(e.key)){e.preventDefault();const t=TABS[+e.key-1];if(t)switchTab(t)}});
+  if(e.altKey&&/^[1-9]$/.test(e.key)){e.preventDefault();const t=TABS[+e.key-1];if(t)switchTab(t)}});
 /* ---------- count-up for the hero numbers ---------- */
 function countUp(root){if(!root||S.animated||!window.requestAnimationFrame||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches))return;S.animated=true;
   const targets=[];root.querySelectorAll('.hs .v').forEach(v=>{const sp=v.querySelectorAll('.p,.q');if(sp.length)sp.forEach(x=>targets.push(x));else targets.push(v)});targets.forEach(el=>{const t=el.textContent.trim();if(!/^[\d.]+$/.test(t))return;const end=+t,dec=(t.split('.')[1]||'').length,start=performance.now(),dur=900;
@@ -1254,9 +1356,73 @@ function welcomeHtml(){if(S.source!=='demo'||S.hideWelcome)return'';return`<div 
   <div class="actions"><span class="btn primary file-btn">Open survey workbook<input type="file" class="wOpen" accept=".xlsx,.xls,.csv"></span><button class="btn ghost" id="wHide">Hide</button></div></div>`}
 function wireWelcome(el){const i=el.querySelector('.wOpen');if(i)i.onchange=e=>{readFile(e.target.files[0],(wb,name)=>{try{loadWorkbook(wb,name);toast(`Loaded ${S.pairs.length} matched participants`)}catch(err){toast(err.message)}});e.target.value=''};const h=el.querySelector('#wHide');if(h)h.onclick=()=>{S.hideWelcome=true;renderTab()}}
 
+/* ============================== TEPD-STYLE HELPERS: takeaways, terms, questions, summary sheet ============================== */
+const L=(en,ar)=>S.lang==='ar'?ar:en;
+const TA=t=>S.lang==='ar'&&window.trAR?window.trAR(String(t)):String(t);
+const ISO=s=>S.lang==='ar'?String(s).replace(/(?<![\w.⁦])([+−-]\d[\d.]*%?|\d[\d.]*%)/g,'⁦$1⁩'):String(s);
+function takeaway(en,ar,warn){return`<div class="takeaway${warn?' warn':''}" data-noi18n><b class="tk">${L('In short','باختصار')}</b><span>${ISO(L(en,ar))}</span></div>`}
+const TERMS={
+ matched:['Matched participants','People who took both the pre-test and the post-test, linked by their ministry ID. Only they are counted, so every change is measured on the same people.','المشاركون المطابَقون','الأشخاص الذين قدّموا الاختبارين القبلي والبعدي، ورُبطوا بالرقم الوزاري. يُحسب هؤلاء فقط، فيُقاس كل تغيّر على الأشخاص أنفسهم.'],
+ knowledge:['Knowledge score','The total of the marks on the written and tick-box questions (49 marks, or 52 when Q13 is included). Written answers are marked against the rubric.','درجة المعرفة','مجموع علامات الأسئلة الكتابية وأسئلة الاختيار (49 علامة، أو 52 عند تضمين Q13). تُصحَّح الإجابات الكتابية وفق سلّم التصحيح.'],
+ gap:['Gap closed','Of the marks a participant could still gain after the pre-test, the share they actually gained. 50% means they gained half of what was left to gain.','نسبة سدّ الفجوة','من العلامات التي كان بإمكان المشارك كسبها بعد الاختبار القبلي، النسبة التي كسبها فعلًا. 50% تعني أنه كسب نصف ما تبقّى.'],
+ effect:['Effect size (d)','How big the change is compared with how much people differ from each other. Around 0.2 is small, 0.5 medium and 0.8 or more large.','حجم الأثر (d)','مقدار التغيّر مقارنة بمدى اختلاف الأشخاص عن بعضهم. نحو 0.2 صغير، و0.5 متوسط، و0.8 فأكثر كبير.'],
+ p:['p-value and “significant”','How likely a change this big would be if the programme had made no difference. Below .05 counts as statistically significant (“significant”); otherwise “n.s.” (not significant).','قيمة p و«دالّ إحصائيًا»','مدى احتمال ظهور تغيّر بهذا الحجم لو لم يُحدث البرنامج أي فرق. ما دون .05 يُعد دالًا إحصائيًا، وإلا فهو «غير دالّ».'],
+ conf:['Confidence (1–5)','Participants rate how confident they feel applying each of 17 leadership practices: 1 = not at all, 5 = very confident. It is self-reported, not marked.','الثقة (1–5)','يقيّم المشاركون مدى ثقتهم في تطبيق كل من 17 ممارسة قيادية: 1 = غير واثق إطلاقًا، 5 = واثق جدًا. وهي تقدير ذاتي لا يُصحَّح.'],
+ prac:['Practice frequency (1–4)','How often participants say they use each practice: 1 = never, 4 = more than twice a semester. Self-reported.','تكرار الممارسة (1–4)','مدى تكرار استخدام المشاركين لكل ممارسة: 1 = أبدًا، 4 = أكثر من مرتين في الفصل. تقدير ذاتي.'],
+ quadrant:['Knowledge vs confidence','Each dot is one participant: across = how much their marks changed, up = how much their confidence changed. The shaded top-left corner holds people whose confidence rose while their answers did not.','المعرفة مقابل الثقة','كل نقطة مشارك: أفقيًا تغيّر علاماته، وعموديًا تغيّر ثقته. الزاوية العلوية اليسرى المظلَّلة تضم من ارتفعت ثقتهم دون أن تتحسن إجاباتهم.'],
+ dumbbell:['Before-and-after chart','The grey dot is the pre-test, the teal dot the post-test, and the line between them is the change. A longer line means a bigger change.','مخطط قبل وبعد','النقطة الرمادية هي الاختبار القبلي، والخضراء المزرقّة هي البعدي، والخط بينهما هو التغيّر. كلما طال الخط كان التغيّر أكبر.'],
+ minN:['Privacy minimum','Groups with fewer people than this number are hidden, so nobody can be identified from a small group. You can change it in Groups & governorates.','الحد الأدنى للخصوصية','تُخفى الفئات التي يقل عدد أفرادها عن هذا الرقم، حتى لا يمكن التعرف على أحد من فئة صغيرة. يمكن تغييره من صفحة الفئات والمحافظات.'],
+ qwk:['QWK (agreement score)','How closely Copilot’s marks match M&E’s marks on the same answers, from 0 (no better than chance) to 1 (identical). 0.70 or more is the usual bar for trusting automated marking.','QWK (مقياس الاتفاق)','مدى تطابق علامات Copilot مع علامات المتابعة والتقييم على الإجابات نفسها، من 0 (لا أفضل من الصدفة) إلى 1 (تطابق تام). 0.70 فأكثر هو الحد المعتاد للوثوق بالتصحيح الآلي.'],
+ cal:['Calibration set','A small random set of answers per question that M&E marks by hand first. Half become worked examples for Copilot; the other half test how closely Copilot agrees.','عينة المعايرة','عينة عشوائية صغيرة من الإجابات لكل سؤال تصحّحها المتابعة والتقييم يدويًا أولًا. نصفها يصبح أمثلة لـ Copilot، والنصف الآخر يختبر مدى اتفاقه.'],
+ blank:['Blank (auto 0)','Answers that are empty or say things like “I don’t know”. They get 0 automatically and are not sent to Copilot.','فارغة (صفر تلقائي)','الإجابات الفارغة أو التي تقول مثل «لا أعرف». تأخذ صفرًا تلقائيًا ولا تُرسل إلى Copilot.'],
+ review:['Needs review','Answers where Copilot said it was unsure, or where its two marking runs gave different scores. A person confirms or corrects each one.','بحاجة إلى مراجعة','إجابات قال Copilot إنه غير متأكد منها، أو أعطى فيها تشغيلاه درجتين مختلفتين. يؤكدها شخص أو يصحّحها.']};
+const info=k=>`<button class="info" type="button" data-term="${k}" aria-label="What does this mean?" aria-expanded="false">?</button>`;
+(function(){let pop=null,owner=null;const close=()=>{if(pop){pop.remove();pop=null}if(owner){owner.setAttribute('aria-expanded','false');owner=null}};
+  document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('.info[data-term]');if(!b){if(pop&&!e.target.closest('.popover'))close();return}e.preventDefault();e.stopPropagation();if(owner===b){close();return}close();
+    const t=TERMS[b.dataset.term];if(!t)return;pop=document.createElement('div');pop.className='popover';pop.setAttribute('role','dialog');pop.dataset.noi18n='';pop.innerHTML=`<b>${esc(L(t[0],t[2]))}</b>${esc(L(t[1],t[3]))}`;document.body.appendChild(pop);
+    const r=b.getBoundingClientRect(),w=Math.min(320,innerWidth-24);pop.style.maxWidth=w+'px';let x=r.left+scrollX-8;if(S.lang==='ar')x=r.right+scrollX-pop.offsetWidth+8;x=Math.max(12+scrollX,Math.min(x,scrollX+innerWidth-pop.offsetWidth-12));pop.style.left=x+'px';pop.style.top=(r.bottom+scrollY+8)+'px';owner=b;b.setAttribute('aria-expanded','true')},true);
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});addEventListener('scroll',close,{passive:true})})();
+/* ---------- navigation helper ---------- */
+function goTo(o){if(o.set)Object.assign(S,o.set);switchTab(o.tab);if(o.el)setTimeout(()=>{const x=document.querySelector(o.el);if(x){if(x.scrollIntoView)x.scrollIntoView({behavior:'smooth',block:'start'});x.classList.remove('flash');void x.offsetWidth;x.classList.add('flash')}},80);else scrollTo({top:0,behavior:'smooth'})}
+document.addEventListener('click',e=>{const b=e.target.closest&&e.target.closest('[data-goto]');if(!b)return;e.preventDefault();try{goTo(JSON.parse(b.dataset.goto))}catch(err){}});
+const goAttr=o=>`data-goto='${JSON.stringify(o).replace(/'/g,'&#39;')}'`;
+function questionsHtml(){const Qs=[['Did the programme improve knowledge?',{tab:'impact',el:'.hero'}],['Which module needs the most attention?',{tab:'deep',el:'#qPanel'}],['Which questions improved least?',{tab:'deep',el:'#qPanel'}],['Do newer school leaders gain more?',{tab:'groups',set:{segDim:'years'},el:'#grpPanel'}],['Do principals and assistants gain differently?',{tab:'groups',set:{segDim:'job'},el:'#grpPanel'}],['Which governorates gained most?',{tab:'groups',el:'#mapPanel'}],['Do participants feel more confident than they know?',{tab:'impact',el:'#quadPanel'}],['How accurate is the Copilot marking?',{tab:'workflow',el:'#agreePanel'}],['How does this cohort compare with earlier ones?',{tab:'cohorts'}]];
+  return`<div class="panel mt" id="qStart"><div class="panel-head"><div><h2>Start with a question</h2><p>Pick a question and the dashboard takes you to the chart that answers it.</p></div></div><div class="questions">${Qs.map(([t,o])=>`<button class="qchip" ${goAttr(o)}>${t}</button>`).join('')}</div></div>`}
+/* ---------- key terms page ---------- */
+function renderTerms(){const el=document.getElementById('view-terms');el.innerHTML=`<div class="panel-head" style="margin-bottom:16px"><div><h2 style="font-size:22px">Key terms</h2><p>Plain-language explanations of the words and numbers used in this dashboard. The <span class="info" style="pointer-events:none">?</span> buttons next to headings show the same explanations.</p></div></div>
+  <div class="terms" data-noi18n>${Object.entries(TERMS).map(([k,t])=>`<div class="term" id="term-${k}"><h3>${esc(L(t[0],t[2]))}</h3><p>${esc(L(t[1],t[3]))}</p></div>`).join('')}</div>
+  <div class="panel mt"><div class="panel-head"><div><h2>How the numbers are made</h2></div></div><ul class="small" style="margin:0;padding-inline-start:18px;display:grid;gap:6px">
+   <li>Only people with a matched pre-test and post-test are included. Placeholder IDs (all zeros, too short) are left out.</li>
+   <li>Changes are tested with a paired t-test on the same people. Group-versus-rest comparisons use Welch's t-test.</li>
+   <li>Groups smaller than the privacy minimum are hidden everywhere, including the combined-characteristics table.</li>
+   <li>Written answers are marked by M&amp;E or by Copilot against the rubric; Copilot's accuracy is checked against M&amp;E on the calibration set.</li>
+   <li>Confidence and practice are self-ratings read straight from the survey.</li></ul></div>`}
+/* ---------- one-page summary sheet ---------- */
+function renderSummary(){const el=document.getElementById('view-summary');const o=overall(),{K,C,P,TM}=o,cov=coverage(),a=agreement(),hasK=K.n>=5;const today=new Date().toLocaleDateString(S.lang==='ar'?'ar-JO-u-nu-latn':'en-GB',{day:'numeric',month:'long',year:'numeric'});
+  const mods=MODULES.map(Mo=>{const t=paired(...pairVals(r=>modScore(r,Mo.m))),mx=modMax(Mo.m),c=paired(...pairVals(r=>likAvg(r,'conf',Mo.m))),pr=paired(...pairVals(r=>likAvg(r,'prac',Mo.m)));return{Mo,t,mx,c,pr,ng:t.n?(t.post-t.pre)/(mx-t.pre):NaN}});
+  const qs=includedQ().map(q=>{const t=paired(...pairVals(r=>score(r,q.n)));return{q,t,ng:t.n?(t.post-t.pre)/(q.max-t.pre):NaN}}).filter(x=>x.t.n>=5).sort((x,y)=>x.ng-y.ng);
+  const ins=insights().slice(0,5);const single=(S.meta.preOnly||[]).length+(S.meta.postOnly||[]).length;
+  el.innerHTML=`<div class="actions" style="margin-bottom:14px"><button class="btn primary" id="shPrint">Print this page / save as PDF</button><span class="small muted">One A4 page for directors, donors or a report annex.</span></div>
+  <div class="sheet"><div class="sh-head"><div><div class="sh-org">Queen Rania Teacher Academy · Monitoring &amp; Evaluation</div><h2>Programme results: ${esc(S.cohort)}</h2><div class="sh-prog">Advanced Instructional Leadership Diploma · pre-test and post-test · <span>${esc(today)}</span></div></div><div class="sh-mark">QRTA</div></div>
+   <div class="sh-figs"><div><b class="num">${S.pairs.length}</b><span>matched participants${S.meta.raw?` (of ${S.meta.raw.pre} who started)`:''}</span></div>
+    <div><b class="num">${hasK?`${fmt(K.pre)} → ${fmt(K.post)}`:'–'}</b><span>${hasK?`knowledge out of ${TM}`:'knowledge: awaiting marking'}</span></div>
+    <div><b class="num">${hasK?fmt(K.d,2):'–'}</b><span>${hasK?effLabel(K.d)+' effect':'effect size'}</span></div>
+    <div><b class="num">${fmt(C.pre,2)} → ${fmt(C.post,2)}</b><span>confidence out of 5</span></div></div>
+   <div class="sh-cols"><div><h3>Modules</h3><table><thead><tr><th>Module</th><th class="r">Knowledge</th><th>Gap closed</th><th class="r">Confidence</th></tr></thead><tbody>
+     ${mods.map(m=>`<tr><td>${esc(m.Mo.name)}</td><td class="r num">${m.t.n?`${fmt(m.t.pre)} → <b>${fmt(m.t.post)}</b>`:'–'}</td><td>${m.t.n?`<div style="display:flex;gap:6px;align-items:center"><div class="mini"><i style="width:${Math.max(0,Math.min(100,m.ng*100))}%"></i></div><span class="num">${pct(m.ng)}</span></div>`:'–'}</td><td class="r num">${fmt(m.c.pre,2)} → <b>${fmt(m.c.post,2)}</b></td></tr>`).join('')}</tbody></table>
+     ${qs.length>=3?`<h3>Questions that improved least</h3><table><tbody>${qs.slice(0,3).map(x=>`<tr><td><b>Q${x.q.n}</b> ${esc(x.q.title)}</td><td class="r num">${pct(x.ng)}</td></tr>`).join('')}</tbody></table>`:''}</div>
+    <div><h3>Key findings</h3><ul>${ins.map(i=>`<li>${i.h}</li>`).join('')}</ul>
+     <h3>Practice frequency</h3><p><span>Self-rated use of the 17 leadership practices rose from</span> <b class="num">${fmt(P.pre,2)}</b> <span>to</span> <b class="num">${fmt(P.post,2)}</b> <span>out of 4.</span></p></div></div>
+   <div class="sh-foot"><span>Knowledge marks: ${cov.hum} by people · ${cov.ai} by Copilot${a.n?` · Copilot–M&amp;E agreement QWK ${fmt(a.qwk,2)}`:''}.</span> <span>Confidence and practice are self-rated.</span> ${single?`<span>${single} people took only one test and are not included.</span>`:''} <span>Made with AILPD Pre/Post Studio.</span></div></div>`;
+  el.querySelector('#shPrint').onclick=()=>{document.body.classList.add('print-summary');const done=()=>{document.body.classList.remove('print-summary');removeEventListener('afterprint',done)};addEventListener('afterprint',done);window.print();setTimeout(done,1500)}}
+/* ---------- presentation mode ---------- */
+function setPresent(on){document.documentElement.classList.toggle('present',on);const b=document.getElementById('presentBtn');if(b)b.setAttribute('aria-pressed',on);try{localStorage.setItem('ailpd-present',on?'1':'')}catch(e){}if(on&&!['impact','deep','groups','cohorts','summary','terms'].includes(S.tab))switchTab('impact');if(S.tab==='impact')renderTab()}
+document.getElementById('presentBtn').onclick=()=>setPresent(!document.documentElement.classList.contains('present'));
+try{if(localStorage.getItem('ailpd-present'))document.documentElement.classList.add('present')}catch(e){}
+
 /* ============================== WIRING ============================== */
-const TABS=['impact','deep','groups','cohorts','check','marking','workflow'];
-function renderTab(){renderFocusBar();withFocus(()=>{({impact:renderImpact,deep:renderDeep,groups:renderGroups,cohorts:renderCohorts,check:renderCheck,marking:renderMarking,workflow:renderWorkflow})[S.tab]()})}
+const TABS=['impact','deep','groups','cohorts','summary','check','marking','workflow','terms'];
+function renderTab(){renderFocusBar();withFocus(()=>{({impact:renderImpact,deep:renderDeep,groups:renderGroups,cohorts:renderCohorts,summary:renderSummary,terms:renderTerms,check:renderCheck,marking:renderMarking,workflow:renderWorkflow})[S.tab]()})}
 function renderAll(){renderStatus();renderTab()}
 function switchTab(t){S.tab=t;document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));TABS.forEach(x=>document.getElementById('view-'+x).hidden=x!==t);renderTab()}
 document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)switchTab(b.dataset.tab)});
@@ -1270,7 +1436,8 @@ demoData();initCaps();if(msAvailable())msInit().then(async()=>{if(MS.account)awa
 <script>
 const AR={
 /* ---------- chrome ---------- */
-"AILPD Pre/Post Studio":"منصة تحليل الاختبار القبلي والبعدي – دبلوم القيادة التعليمية المتقدمة",
+"AILPD Pre/Post Studio":"منصة AILPD للاختبار القبلي والبعدي",
+"Average knowledge rose from":"ارتفع متوسط المعرفة من","out of {#}, and {#} of participants improved":"من {0}، وتحسّن أداء {1} من المشاركين",
 "QRTA · Monitoring & Evaluation":"أكاديمية الملكة رانيا لتدريب المعلمين · المتابعة والتقييم",
 "Marks the Advanced Instructional Leadership Diploma pre/post survey and shows what each cohort gained. Workbooks are read inside this browser and never uploaded.":"تصحّح الاختبار القبلي والبعدي لدبلوم القيادة التعليمية المتقدمة وتُظهر ما حققه كل فوج. تُقرأ الملفات داخل هذا المتصفح ولا تُرفع إلى أي مكان.",
 "Open survey workbook":"فتح ملف الاستبانة",
@@ -1789,6 +1956,30 @@ const AR={
 "Rubric pack loaded from OneDrive":"حُمّلت حزمة سلّم التصحيح من OneDrive","That file is not a valid rubric pack":"هذا الملف ليس حزمة سلّم تصحيح صالحة","Rubric pack loaded":"حُمّلت حزمة سلّم التصحيح","Rubric pack saved to your OneDrive":"حُفظت حزمة سلّم التصحيح في OneDrive","Loaded, but could not save it to OneDrive":"حُمّلت، لكن تعذّر حفظها في OneDrive",
 "Sign in to Microsoft to keep a cohort history":"سجّل الدخول إلى Microsoft للاحتفاظ بسجل الأفواج","Sign in to Microsoft to keep a cohort history in your OneDrive.":"سجّل الدخول إلى Microsoft للاحتفاظ بسجل الأفواج في OneDrive.",
 "Sign in to Microsoft first":"سجّل الدخول إلى Microsoft أولًا",
+
+/* ---------- TEPD-style redesign ---------- */
+"Advanced Instructional Leadership Diploma · pre/post results":"دبلوم القيادة التعليمية المتقدمة · نتائج الاختبار القبلي والبعدي",
+"Results":"النتائج","Overview":"نظرة عامة","One-page summary":"ملخص في صفحة واحدة","Workflow & accuracy":"خطوات العمل والدقة","Help":"مساعدة","Key terms":"المصطلحات الأساسية","Presentation mode":"وضع العرض",
+"Menu":"القائمة","Sections":"الأقسام","What does this mean?":"ماذا يعني هذا؟",
+"Key messages":"الرسائل الرئيسية","Show me":"اعرض لي",
+"Start with a question":"ابدأ بسؤال","Pick a question and the dashboard takes you to the chart that answers it.":"اختر سؤالًا وستنقلك لوحة المعلومات إلى المخطط الذي يجيب عنه.",
+"Did the programme improve knowledge?":"هل حسّن البرنامج المعرفة؟","Which module needs the most attention?":"أي وحدة تحتاج إلى اهتمام أكبر؟","Which questions improved least?":"أي الأسئلة تحسّنت أقل؟","Do newer school leaders gain more?":"هل يحقق القادة الأحدث خبرة مكاسب أكبر؟","Do principals and assistants gain differently?":"هل يختلف مكسب المديرين عن المساعدين؟","Which governorates gained most?":"أي المحافظات حققت أكبر مكسب؟","Do participants feel more confident than they know?":"هل يشعر المشاركون بثقة أكبر مما يعرفون؟","How accurate is the Copilot marking?":"ما مدى دقة تصحيح Copilot؟","How does this cohort compare with earlier ones?":"كيف يقارن هذا الفوج بالأفواج السابقة؟",
+"Print this page / save as PDF":"طباعة هذه الصفحة / حفظها PDF","One A{#} page for directors, donors or a report annex.":"صفحة A{0} واحدة للمديرين أو الجهات المانحة أو ملحق تقرير.",
+"Queen Rania Teacher Academy · Monitoring & Evaluation":"أكاديمية الملكة رانيا لتدريب المعلمين · المتابعة والتقييم","Programme results":"نتائج البرنامج",
+"Advanced Instructional Leadership Diploma · pre-test and post-test ·":"دبلوم القيادة التعليمية المتقدمة · الاختبار القبلي والبعدي ·",
+"matched participants (of {#} who started)":"مشاركًا مطابَقًا (من أصل {0} بدأوا)","knowledge out of {#}":"المعرفة من {0}","knowledge: awaiting marking":"المعرفة: بانتظار التصحيح","confidence out of {#}":"الثقة من {0}","effect size":"حجم الأثر",
+"Modules":"الوحدات","Module":"الوحدة","Gap closed":"نسبة سدّ الفجوة","Questions that improved least":"الأسئلة الأقل تحسّنًا","Key findings":"أبرز النتائج","Practice frequency":"تكرار الممارسة",
+"Self-rated use of the {#} leadership practices rose from":"ارتفع التقدير الذاتي لتطبيق الممارسات القيادية الـ{0} من","out of {#}.":"من {0}.",
+"Knowledge marks":"علامات المعرفة","{#} by people":"{0} بتصحيح بشري","{#} by Copilot":"{0} بتصحيح Copilot","{#} by Copilot.":"{0} بتصحيح Copilot.","Copilot–M&E agreement QWK {#}.":"اتفاق Copilot مع المتابعة والتقييم QWK {0}.",
+"Confidence and practice are self-rated.":"الثقة والممارسة تقديرات ذاتية.","{#} people took only one test and are not included.":"{0} شخصًا قدّموا اختبارًا واحدًا فقط ولم يُشملوا.","Made with AILPD Pre/Post Studio.":"أُعدّ باستخدام منصة AILPD.",
+"Plain-language explanations of the words and numbers used in this dashboard. The":"شرح مبسّط للكلمات والأرقام المستخدمة في لوحة المعلومات هذه. أزرار","buttons next to headings show the same explanations.":"بجانب العناوين تعرض الشرح نفسه.",
+"How the numbers are made":"كيف تُحسب الأرقام",
+"Only people with a matched pre-test and post-test are included. Placeholder IDs (all zeros, too short) are left out.":"يُشمل فقط من لديهم اختبار قبلي وبعدي مطابَقان. تُستبعد الأرقام الوزارية غير الصالحة (أصفار فقط أو قصيرة جدًا).",
+"Changes are tested with a paired t-test on the same people. Group-versus-rest comparisons use Welch's t-test.":"يُختبر التغيّر باختبار t للعينات المترابطة على الأشخاص أنفسهم. وتستخدم مقارنات الفئة مقابل البقية اختبار ويلش.",
+"Groups smaller than the privacy minimum are hidden everywhere, including the combined-characteristics table.":"تُخفى الفئات الأصغر من الحد الأدنى للخصوصية في كل مكان، بما في ذلك جدول الخاصيتين معًا.",
+"Written answers are marked by M&E or by Copilot against the rubric; Copilot's accuracy is checked against M&E on the calibration set.":"تُصحَّح الإجابات الكتابية من المتابعة والتقييم أو من Copilot وفق سلّم التصحيح، وتُقاس دقة Copilot مقارنة بالمتابعة والتقييم على عينة المعايرة.",
+"Confidence and practice are self-ratings read straight from the survey.":"الثقة والممارسة تقديرات ذاتية تُقرأ مباشرة من الاستبانة.",
+"Switch section (with Alt)":"التنقل بين الأقسام (مع Alt)",
 /* ---------- toasts & errors ---------- */
 "Every written answer already has a mark":"كل إجابة مكتوبة لديها علامة بالفعل",
 "Tip: mark the calibration set first so Copilot gets worked examples":"نصيحة: صحّح عينة المعايرة أولًا ليحصل Copilot على أمثلة محلولة",
@@ -1890,7 +2081,7 @@ function paintToggles(){const lb=document.getElementById('langBtn'),tb=document.
 window.setLang=function(l){S.lang=l==='ar'?'ar':'en';store.set('ailpd-lang',S.lang);const h=document.documentElement;h.lang=S.lang;h.dir=S.lang==='ar'?'rtl':'ltr';
   document.title=S.lang==='ar'?'منصة تحليل الاختبار القبلي والبعدي':'AILPD Pre/Post Studio';S.aiText='';apply(document.body);renderAll();paintToggles()};
 window.setTheme=function(t){document.documentElement.setAttribute('data-theme',t);store.set('ailpd-theme',t);paintToggles();if(S.tab==='impact')renderImpact()};
-const acts=document.querySelector('header.top .actions');
+const acts=document.getElementById('sideTools');
 acts.insertAdjacentHTML('afterbegin',`<div class="seg lang" id="langBtn" role="group" aria-label="Language"><button data-lang="en" aria-pressed="true">English</button><button data-lang="ar" aria-pressed="false" lang="ar">العربية</button></div><button class="btn icon" id="themeBtn"></button>`);
 document.getElementById('langBtn').addEventListener('click',e=>{const b=e.target.closest('[data-lang]');if(b&&b.dataset.lang!==S.lang)setLang(b.dataset.lang)});
 document.getElementById('themeBtn').onclick=()=>setTheme(theme()==='dark'?'light':'dark');
