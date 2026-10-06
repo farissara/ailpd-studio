@@ -537,7 +537,7 @@ const Q=[{"n":1,"m":1,"max":3,"title":"Curriculum, instruction & assessment rela
  {"n":16,"m":4,"max":3,"title":"Evidence of success as a leader","kw":["مصادرالأدلة","evidencesour"]}];
 const RUBRIC_PACK=null;
 const QBY={};Q.forEach(q=>{QBY[q.n]=q});let RUBRIC_OK=false;
-function applyRubric(pack){if(!pack||!pack.rubric)return false;window.CURRENT_PACK=pack;Object.entries(pack.rubric).forEach(([n,r])=>{if(QBY[n])Object.assign(QBY[n],r)});Object.entries(pack.mep||{}).forEach(([n,t])=>{if(QBY[n])QBY[n].mep=t});if(pack.ar&&window.i18nAdd)window.i18nAdd(pack.ar);else if(pack.ar)window.__arPending=pack.ar;RUBRIC_OK=Q.filter(q=>!q.auto).every(q=>q.levels&&q.levels.length);return RUBRIC_OK}
+function applyRubric(pack){if(!pack||!pack.rubric)return false;window.CURRENT_PACK=pack;window.PACK_BANK=Array.isArray(pack.bank)?pack.bank.filter(b=>b&&b.t!=null&&!isNaN(+b.s)).map(b=>({q:+b.q,s:+b.s,t:String(b.t)})):(window.PACK_BANK||[]);Object.entries(pack.rubric).forEach(([n,r])=>{if(QBY[n])Object.assign(QBY[n],r)});Object.entries(pack.mep||{}).forEach(([n,t])=>{if(QBY[n])QBY[n].mep=t});if(pack.ar&&window.i18nAdd)window.i18nAdd(pack.ar);else if(pack.ar)window.__arPending=pack.ar;RUBRIC_OK=Q.filter(q=>!q.auto).every(q=>q.levels&&q.levels.length);return RUBRIC_OK}
 applyRubric(RUBRIC_PACK);const WRITTEN=Q.filter(q=>!q.auto);
 const CHECK_CORRECT=new Set([1,4,6,7,8,9,10]),CHECK_WRONG=new Set([2,3,5]);
 const CHECK_LABELS=['Teacher chooses the PD topic','Held in the same school','Uses senior experts','Effective in similar contexts','Includes elements outside school','On-going','Materials to take to the classroom','Context specific','Opportunities for reflection','Team-based learning'];
@@ -1024,9 +1024,9 @@ document.addEventListener('keydown',e=>{if(S.tab!=='marking'||e.target.matches('
 
 /* ============================== FILES: COPILOT, KEY, BANK, RESULTS ============================== */
 const withSel=(q,r)=>(q.n===14?`[Selected: ${r.metaphors.map(o=>METAPHORS[o-1]).join('; ')||'none'}] `:'')+String(r.text[q.n]||'').replace(/\s+/g,' ').trim();
-function examplesFor(q){const pool=[];queue(q.n).forEach(r=>{if(!isAnchor(q.n,r))return;const m=M(r,q.n),h=m.h??m.file;if(h!=null&&!isEmptyAnswer(r.text[q.n]))pool.push({s:h,t:withSel(q,r)})});S.bank.filter(b=>b.q===q.n).forEach(b=>pool.push({s:b.s,t:b.t}));
-  const by={};pool.forEach(p=>(by[p.s]=by[p.s]||[]).push(p));const sc=Object.keys(by).map(Number).sort((a,b)=>b-a),out=[];for(let round=0;round<3&&out.length<6;round++)for(const s of sc){if(out.length>=6)break;const p=by[s][round];if(p)out.push(p)}
-  return out.sort((a,b)=>b.s-a.s).map(p=>`Score ${p.s}: ${String(p.t).slice(0,380)}`).join(' || ')||'No marked examples yet. Rely on the rubric.'}
+function examplesFor(q){const pool=[];queue(q.n).forEach(r=>{if(!isAnchor(q.n,r))return;const m=M(r,q.n),h=m.h??m.file;if(h!=null&&!isEmptyAnswer(r.text[q.n]))pool.push({s:h,t:withSel(q,r)})});S.bank.concat(window.PACK_BANK||[]).filter(b=>b.q===q.n).forEach(b=>pool.push({s:b.s,t:b.t}));
+  const by={};pool.forEach(p=>(by[p.s]=by[p.s]||[]).push(p));const sc=Object.keys(by).map(Number).sort((a,b)=>b-a),out=[];for(let round=0;round<4&&out.length<8;round++)for(const s of sc){if(out.length>=8)break;const p=by[s][round];if(p)out.push(p)}
+  return out.sort((a,b)=>b.s-a.s).map(p=>`Score ${p.s}: ${String(p.t).replace(/\s+/g,' ').slice(0,320)}`).join(' || ')||'No marked examples yet. Rely on the rubric.'}
 const rubricText=q=>!q.levels?'':`RULE: ${q.rule||''}${q.mep?' M&E PRACTICE: '+q.mep:''} || LEVELS: ${q.levels.map((l,s)=>s+' = '+l).join('; ')} || LOOK FOR: ${q.points.join('; ')}`;
 function copilotRowsRaw(opts={}){const rows=[],sent=opts.onlyMissing&&S.roundTrip?new Set(S.roundTrip.codes):null;WRITTEN.forEach(q=>{let ex=null,rb=null;queue(q.n).forEach((r,i)=>{if(dest(q,r)!=='copilot')return;const code=codeOf(q.n,i);if(sent&&!sent.has(code))return;
   const mk=maskPII(withSel(q,r));if(opts.light){rows.push({code,pii:mk.n});return}if(ex==null){ex=examplesFor(q);rb=rubricText(q)}
